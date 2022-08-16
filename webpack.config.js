@@ -1,24 +1,17 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: './index.ts',
-  // devtool: 'inline-source-map',
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
   plugins: [
-   // new CopyPlugin({
-   //   patterns: [
-   //   ]
-   // }),
     new HTMLWebpackPlugin(
       {template: './index.html'}
     ),
@@ -65,5 +58,6 @@ module.exports = {
     },
     compress: true,
     port: 9000,
+    open: true,
   },
 }

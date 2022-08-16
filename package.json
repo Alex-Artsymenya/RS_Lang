@@ -1,10 +1,9 @@
 {
-    "name": "RS_Lang",
+    "name": "rs-lang",
     "version": "1.0.0",
     "description": "RS_Lang, task from RSSchool",
     "private": true,
     "scripts": {
-      "test": "echo  && exit 1",
       "dev": "webpack --mode development",
       "build": "webpack --mode production",
       "watch": "webpack --mode development --watch",
@@ -13,7 +12,9 @@
       "serve": "webpack serve"
     },
     "keywords": [
-    
+      "english",
+      "study english",
+      "app for study"
     ],
     "author": "Aleksei Zhuchkov",
     "license": "ISC",
@@ -39,8 +40,7 @@
       "webpack-dev-server": "^4.9.3"
     },
     "dependencies": {
-      "normalize.css": "^8.0.1",
-      "nouislider": "^15.6.0"
+      "normalize.css": "^8.0.1"
     }
   }
   
