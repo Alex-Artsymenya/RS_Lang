@@ -233,3 +233,63 @@
     background-color: rgba(254, 238, 12, 1);
     border: 0.1rem solid gray;
 }
+
+.check-login {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 34px;
+}
+
+input[type="checkbox"] {
+  display:none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 4rem;
+  left: 1rem;
+  right: 0;
+  bottom: 0;
+  width: 3.1rem;
+  height: 1.5rem;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.3rem;
+  width: 1.3rem;
+  left: 0.1rem;
+  bottom: 0.09rem;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
