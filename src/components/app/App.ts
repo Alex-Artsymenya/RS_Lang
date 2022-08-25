@@ -5,6 +5,7 @@ class App {
   public start(): void {
     const router = new Router();
     router.init();
+    // localStorage.clear();
   }
 }
 

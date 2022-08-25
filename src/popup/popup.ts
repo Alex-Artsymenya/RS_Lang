@@ -25,8 +25,8 @@ export class PopUp {
                             <span class="slider round"></span>
                         </label>
                         ${create
-                            ? '<input type="button" title="Create user" value="Create" id="submit-btn" class="create-btn">'
-                            : '<input type="button" title="Sign in" value="Sign in" id="submit-btn" class="login-btn">'
+                            ? '<input type="button" title="Create user" value="Create" id="submit-btn" class="button authorization-button create-btn">'
+                            : '<input type="button" title="Sign in" value="Sign in" id="submit-btn" class="button authorization-button login-btn">'
                         }
                     </div>
                 </div>`;
@@ -78,29 +78,32 @@ export class PopUp {
         (<HTMLElement>document.querySelector('#submit-btn')).addEventListener('click', async (event) => {
             const user = new AuthUser();
             switch(true) {
-                case (<HTMLElement>event.target).classList.contains('login-btn'): {
-                    console.log('LOGIN');
-                    const respBody = await user.loginUser({
-                        email: (<HTMLInputElement>document.getElementById('user-email')).value,
-                        password: (<HTMLInputElement>document.getElementById('user-pass')).value
-                    });
-                    if (respBody?.error) {
-                        this.handleError(respBody.error.errors);
-                    }
-                    break;
-                }
-                case (<HTMLElement>event.target).classList.contains('create-btn'): {
-                    console.log('CREATE');
-                    const respBody = await user.createUser({
-                        name: (<HTMLInputElement>document.getElementById('user-name')).value,
-                        email: (<HTMLInputElement>document.getElementById('user-email')).value,
-                        password: (<HTMLInputElement>document.getElementById('user-pass')).value
-                    });
-                    if (respBody?.error) {
-                        this.handleError(respBody.error.errors);
-                    }
-                    break;
-                }
+                // case (<HTMLElement>event.target).classList.contains('login-btn'): {
+                //     console.log('LOGIN');
+                //     const respBody = await user.loginUser({
+                //         email: (<HTMLInputElement>document.getElementById('user-email')).value,
+                //         password: (<HTMLInputElement>document.getElementById('user-pass')).value
+                //     });
+                //     if (respBody?.error) {
+                //         this.handleError(respBody.error.errors);
+                //     }
+                //     if (respBody.message === 'Authenticated') {
+                //         this.closePopupButtonFunc();
+                //     }
+                //     break;
+                // }
+                // case (<HTMLElement>event.target).classList.contains('create-btn'): {
+                //     console.log('CREATE');
+                //     const respBody = await user.createUser({
+                //         name: (<HTMLInputElement>document.getElementById('user-name')).value,
+                //         email: (<HTMLInputElement>document.getElementById('user-email')).value,
+                //         password: (<HTMLInputElement>document.getElementById('user-pass')).value
+                //     });
+                //     if (respBody?.error) {
+                //         this.handleError(respBody.error.errors);
+                //     }
+                //     break;
+                // }
                 default: {
                     console.log('something else');
                 }

@@ -3,6 +3,8 @@ import Drawer from '../drawer/Drawer';
 import Button from './Button';
 import Request from '../../services/Requests';
 import '../../scss/components/_authorization-form.scss';
+import { AuthUser } from '../../auth/auth';
+import { IAuthError } from '../../type';
 
 type authorizationType = {
   message: string;
@@ -47,6 +49,7 @@ class AuthorizationForm implements Component {
           <div class="login__close"></div>
           <h1>${this.type}</h1>
           <div class="login__content">
+          <p class="error login__error-text" id="name-error"></p>
             <input
               id="email"
               name="email"
@@ -83,7 +86,7 @@ class AuthorizationForm implements Component {
     }
   }
 
-  private showErrorMessage(id: 'password-error' | 'email-error', errorText: string) {
+  private showErrorMessage(id: string, errorText: string) {
     const errorElement = document.getElementById(id) as HTMLElement;
     errorElement.innerHTML = errorText;
     const input = errorElement.previousElementSibling;
@@ -95,21 +98,54 @@ class AuthorizationForm implements Component {
   private changeForm() {
     if (this.type === 'Sign in') {
       this.type = 'Sign up';
-      //this.action = this.createUser;
+      this.action = this.createUser;
     } else {
       this.type = 'Sign in';
       this.action = this.loginUser;
     }
   }
 
-  
-
-  private async loginUser(email: string, password: string): Promise<void> {
+  private async loginUser(email: string, password: string, name?: string): Promise<void> {
     try {
-      const res = await Request.loginUser({ email, password });
-      AuthorizationForm.isAuthorized = true;
-      //AuthorizationForm.authorizationInfo = res;
-      this.setLocalStorage();
+      const res = await AuthUser.loginUser({email: email, password: password});
+      console.log('res-->', res);
+      if (res?.error) {
+        this.showErrorMessage('email-error', `${res.error.errors[0].message}`);
+        this.showErrorMessage('password-error', `${res.error.errors[0].message}`);
+      }
+      if (res.message === 'Authenticated') {
+        AuthorizationForm.isAuthorized = true;
+        AuthorizationForm.authorizationInfo = res;
+        this.setLocalStorage();
+      }
+
+    } catch (error) {
+      if (error == 'SyntaxError: Unexpected token F in JSON at position 0') {
+        this.showErrorMessage('password-error', 'Wrong password');
+      }
+      if (error == 'SyntaxError: Unexpected token C in JSON at position 0') {
+        this.showErrorMessage('email-error', `account with this email doesn't exist.`);
+      }
+    }
+  }
+  errorHandler(errors: IAuthError[]) {
+    errors.forEach((el) => {
+      this.showErrorMessage(`${el.path[0]}-error`, `${el.message}`);
+      // el.path[0] 
+    })
+  }
+  private async createUser(email: string, password: string, name: string): Promise<void> {
+    try {
+      const respBody = await AuthUser.createUser({
+        name: name,
+        email: email,
+        password: password
+    });
+    console.log('respBody', respBody);
+    if (respBody?.error) {
+      this.errorHandler(respBody.error.errors);
+    }
+
     } catch (error) {
       if (error == 'SyntaxError: Unexpected token F in JSON at position 0') {
         this.showErrorMessage('password-error', 'Wrong password');
@@ -141,9 +177,12 @@ class AuthorizationForm implements Component {
 
     button.addEventListener('click', async (event: MouseEvent) => {
       event.preventDefault();
-      //const email: string = form.elements['email'].value;
-     // const password: string = form.elements['password'].value;
-     // await this.action(email, password);
+      const name: string = (<HTMLInputElement>document.getElementById('name'))?.value;
+      const email: string = (<HTMLInputElement>document.getElementById('email')).value;
+      console.log('email', email);
+     const password: string = (<HTMLInputElement>document.getElementById('password')).value;
+     console.log('pass', password);
+     await this.action(email, password, name);
       if (AuthorizationForm.isAuthorized) {
         const button = document.getElementById('authorization-button') as HTMLElement;
         button.innerHTML = 'Log out';
@@ -152,7 +191,18 @@ class AuthorizationForm implements Component {
     });
 
     switchForm.addEventListener('click', () => {
+      const name = document.createElement('input');
+      name.id = 'name';
+      name.name = 'name';
+      name.placeholder = 'name';
+      name.type = 'text';
+      const mistText = document.getElementById('name-error');
       this.changeForm();
+      if (this.type == 'Sign up') {
+        mistText?.before(name);
+      } else {
+        (<HTMLElement>document.getElementById('name')).remove();
+      };
       inputs[1].focus();
       inputs[0].focus();
       title.innerHTML = this.type;
