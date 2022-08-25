@@ -1,5 +1,5 @@
-import { PopUp } from "./popup/popup";
+import App from "./components/app/App";
+import "./style.scss";
 
-console.log("hello");
-const popup = new PopUp();
-popup.run();
+const app: App = new App();
+app.start();
