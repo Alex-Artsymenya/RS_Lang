@@ -152,6 +152,9 @@ class AuthorizationForm implements Component {
     if (respBody?.error) {
       this.errorHandler(respBody.error.errors);
     }
+    if (respBody.status === 200) {
+      await this.loginUser(email, password);
+    }
 
     } catch (error) {
       if (error == 'SyntaxError: Unexpected token F in JSON at position 0') {
