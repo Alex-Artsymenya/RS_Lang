@@ -3,6 +3,7 @@ import Drawer from "./drawer/Drawer";
 import Button from "./common/Button";
 import AuthorizationForm from "./common/AuthorizationForm";
 import "../scss/layout/_header.scss";
+import { PopUp } from "../popup/popup";
 
 class Header implements Component {
   private class: string;
@@ -80,6 +81,8 @@ class Header implements Component {
     ) as NodeListOf<HTMLInputElement>;
 
     button.addEventListener("click", () => {
+      // const popup = new PopUp();
+      // popup.run();
       if (AuthorizationForm.isAuthorized) {
         AuthorizationForm.isAuthorized = false;
         inputs.forEach((input) => (input.value = ""));
