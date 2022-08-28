@@ -1,7 +1,7 @@
 @import '../abstract/constants';
 .textbook-navigation {
   height: 130px;
-  width: calc(100vw - 20px);
+  // width: calc(100vw - 20px);
 }
 
 .navigation-buttons{
@@ -16,7 +16,7 @@
 .textbook-navigation__wrapper {
   margin: auto;
   height: 100%;
-  width: calc(100vw - 20px);
+  // width: calc(100vw - 20px);
   background-color: $color-dark;
   @include vertical-flex();
   justify-content: flex-start;

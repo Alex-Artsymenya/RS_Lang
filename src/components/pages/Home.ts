@@ -1,38 +1,5 @@
+import { coloborations } from "../common/coloborations";
 import Page from "./Page";
-
-interface coloboration {
-  name: string,
-  github: string,
-  create: string[]
-}
-
-const coloborations: coloboration[] = [
-  {
-    name: "Aleksei Zhuchkov",
-    github: "https://github.com/kelzerock",
-    create: [
-      "something",
-      "something1",
-    ]
-  },
-  {
-    name: "Ihar Pavetka",
-    github: "https://github.com/MuJlblii",
-    create: [
-      "something",
-      "something1",
-    ]
-  },
-  {
-    name: "Aleksei Artsymenya",
-    github: "https://github.com/Alex-Artsymenya",
-    create: [
-      "something",
-      "something1",
-    ]
-  },
-
-]
 
 class HomePage implements Page {
   public async render(): Promise<string> {
@@ -43,7 +10,6 @@ class HomePage implements Page {
       </section>
       <section class="our-team">
         <h2>Our team:</h2>`
-
       coloborations.forEach(item => {
         view +=  `
         <div class="item-team">

@@ -31,3 +31,25 @@
 .rs-logo:hover {
   filter: invert(15%);
 }
+
+
+footer .coloboration-info {
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+  width: 250px;
+  justify-content: space-between;
+
+  h4 {
+    margin: 0 0 5px 0;
+  }
+
+  .img-github {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background-color: white;
+  }
+}
