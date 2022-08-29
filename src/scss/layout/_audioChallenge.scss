@@ -1,0 +1,52 @@
+.block_audiochallenge {
+  display: flex;
+  flex-direction: column;
+
+  a {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: solid white 2px;
+    border-radius: 15px;
+    animation-duration: .5s;
+
+    &:hover {
+      background-color: rgb(58, 58, 58);
+    }
+    
+    &:active {
+      background-color: white;
+      color: black;
+    }
+  }
+  img {
+    height: 150px;
+  }
+}
+
+.layoutForAudioChallenge {
+  position:absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: lightcyan;
+
+  .img-close-btn{
+    width: 40px;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    
+    &:hover {
+      transform: rotate(135deg);
+      // transform: scale(3);
+    }
+  }
+}
