@@ -16,6 +16,9 @@ export class AuthUser {
             if (response.status == 417) {
                 return {error: {errors: [{ path: ['email'], message: 'This email already used, try another, or Log in'}]}}
             }
+            if (response.status === 200) {
+                return response;
+            }
             const body = await response.json();
             console.log('body-create-auth-->', body);
             return body;

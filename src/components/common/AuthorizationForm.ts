@@ -86,6 +86,13 @@ class AuthorizationForm implements Component {
     }
   }
 
+  static clearLocalStorage(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userInfo');
+  }
+
   private showErrorMessage(id: string, errorText: string) {
     const errorElement = document.getElementById(id) as HTMLElement;
     errorElement.innerHTML = errorText;
@@ -145,6 +152,9 @@ class AuthorizationForm implements Component {
     if (respBody?.error) {
       this.errorHandler(respBody.error.errors);
     }
+    if (respBody.status === 200) {
+      await this.loginUser(email, password);
+    }
 
     } catch (error) {
       if (error == 'SyntaxError: Unexpected token F in JSON at position 0') {
@@ -180,12 +190,12 @@ class AuthorizationForm implements Component {
       const name: string = (<HTMLInputElement>document.getElementById('name'))?.value;
       const email: string = (<HTMLInputElement>document.getElementById('email')).value;
       console.log('email', email);
-     const password: string = (<HTMLInputElement>document.getElementById('password')).value;
-     console.log('pass', password);
-     await this.action(email, password, name);
+      const password: string = (<HTMLInputElement>document.getElementById('password')).value;
+      console.log('pass', password);
+      await this.action(email, password, name);
       if (AuthorizationForm.isAuthorized) {
         const button = document.getElementById('authorization-button') as HTMLElement;
-        button.innerHTML = 'Log out';
+        button.innerHTML = `Log out: ${localStorage.getItem('name')}`;
         closeForm();
       }
     });
