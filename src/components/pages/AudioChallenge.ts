@@ -2,12 +2,23 @@ import Page from "./Page";
 import '../../scss/layout/_audioChallenge.scss'
 import { Request } from "../../services/Requests";
 import { Card } from "../common/WordCard";
+import { CardInfo } from "../common/interfaceList";
+import Utils from "../../services/Utils";
 
 class AudioChallenge implements Page {
   private hearts: number;
+  private stateCard: CardInfo[];
+  private stateCheck: number[];
+  private stateResult: CardInfo[];
+  private counter: number;
+
 
   constructor(){
+    this.counter = 0;
     this.hearts = 5;
+    this.stateCard = [];
+    this.stateCheck = [];
+    this.stateResult = []
   }
 
   public async render(): Promise<string> {
@@ -18,7 +29,6 @@ class AudioChallenge implements Page {
       'B2',
       'C1',
       'C2',
-      'User words'
     ];
 
     let buttons:string = '';
@@ -27,7 +37,7 @@ class AudioChallenge implements Page {
       buttons += `
         <li>
           <a class="${
-            parseInt(RSLangGroup) < 7 ? 
+            parseInt(RSLangGroup) < 6 ? 
         index === parseInt(RSLangGroup) ? 
         'button' : 
         'button_grey' :
@@ -87,18 +97,99 @@ class AudioChallenge implements Page {
         elem.remove()
       }
       elem.append(img)
-
+      const activeBtn = document.querySelector('.test-audiochalenge .button') as HTMLElement;
       document.querySelector('#page_container')?.append(elem)
-      this.startGame()
+      this.CreateStateCard(parseInt(activeBtn.dataset.index as string))
 
     }
   }
 
-  public async startGame(){
-    console.log('start game')
-    const card = await Request.getWordById('5e9f5ee35eb9e72bc21af4a0')
-    console.log(card)
-    return card
+  public async CreateStateCard(num: number){
+    this.clearState();
+    this.createViewAudioChallenge();
+    for(let i = 0; i < 30 ; i++){
+      const arrayCards = await Request.getWordsList({group: num, page: i});
+      this.stateCard.push(...arrayCards);
+    } 
+    this.shuffleArr(this.stateCard);
+    this.addLogicForGame()
+  }
+
+  public addLogicForGame() {
+    this.stateCheck = [this.counter];
+        const sound = document.querySelector('.logo-sound_audio-chellenge') as HTMLElement;
+        const arrTextCards = document.querySelectorAll('.text_audio-chellenge') as NodeListOf<Element>
+        sound.dataset.infoID = this.stateCard[this.counter].id;
+        this.createAudioFile(this.stateCard[this.counter]).startPlay()
+        sound.onclick = () => {
+          this.createAudioFile(this.stateCard[this.counter]).audio.play()
+        }
+        while(this.stateCheck.length < 4){
+          const randomNumber = Utils.getRndInteger(0, 599);
+          if(!this.stateCheck.includes(randomNumber)){
+            this.stateCheck.push(randomNumber)
+          }
+        }
+        this.shuffleArr(this.stateCheck)
+        this.stateCheck.forEach((el, index)=> {
+          arrTextCards[index].innerHTML = this.stateCard[el].wordTranslate;
+          (arrTextCards[index] as HTMLElement).dataset.infoID = this.stateCard[el].id;
+          (arrTextCards[index] as HTMLElement).onclick = (event:Event) => {
+            const elem = event.target as HTMLElement;
+            console.log('compare', elem.dataset.infoID === sound.dataset.infoID)
+            if(elem.dataset.infoID === sound.dataset.infoID){
+              elem.classList.add('right_audio-chellenge')
+            } else {
+              elem.classList.add('false_audio-chellenge')
+              const position = this.stateCheck.indexOf(this.counter)
+              arrTextCards[position].classList.add('right_audio-chellenge')
+            }
+            setTimeout(() => {
+              arrTextCards.forEach(el=> {
+                el.classList.remove('right_audio-chellenge')
+                el.classList.remove('false_audio-chellenge')
+              })
+              this.addLogicForGame()
+            }, 1000);
+            this.counter += 1;
+          }
+        })
+  }
+
+  public createViewAudioChallenge(){
+    const element = document.querySelector('.layoutForAudioChallenge') as HTMLElement
+    const blockForGame = document.createElement('div');
+    blockForGame.classList.add('block-for-game');
+    blockForGame.innerHTML += `
+    <a class="logo-sound_audio-chellenge"><img src="./assets/svg/volume.svg" alt="logo sound"></a>
+    <div class="minor-block_audio-chellenge">
+      <a class="text_audio-chellenge"></a>
+      <a class="text_audio-chellenge"></a>
+      <a class="text_audio-chellenge"></a>
+      <a class="text_audio-chellenge"></a>
+    </div>
+    `
+    element.append(blockForGame)
+  }
+
+  public createAudioFile(element: CardInfo) {
+    let audio = document.createElement('audio');
+    audio.src = Utils.getFullURL('/') + element.audio;
+    audio.onload = () => {audio.play()}
+    return {audio: audio, startPlay(){audio.play()} };
+  }
+
+  private clearState():void {
+    this.stateCard = [];
+    this.stateCheck = [];
+    this.stateResult = [];
+  }
+
+  private shuffleArr(array: unknown[]):void {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
   }
 
   public async after_render(): Promise<void> {

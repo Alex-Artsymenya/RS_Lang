@@ -196,6 +196,7 @@ class Textbook implements Page {
 
   private updateGroupPage(): void {
     const hash = window.location.hash.split("/");
+    console.log(hash)
     if (hash[1] === "textbook" && hash.length === 4) {
       const groupX = Number(window.location.hash.split("/")[2]);
       const pageX = Number(window.location.hash.split("/")[3]);
@@ -234,14 +235,14 @@ class Textbook implements Page {
   }
 
   public async after_render(): Promise<void> {
-    window.addEventListener("hashchange", () => {
+    window.onhashchange = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (window.location.hash.split("/")[1] === "textbook") {
         setTimeout(this.updateGroupPage, 100);
         setTimeout(this.updatePageButtons, 100);
         setTimeout(this.showActiveGroupButton, 100);
       }
-    });
+    };
     document
       .querySelectorAll(".word-card__audio")
       .forEach((el) => el.addEventListener("click", this.playAudio));
