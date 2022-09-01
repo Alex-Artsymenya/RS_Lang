@@ -14,3 +14,8 @@ export interface CardInfo {
   textMeaningTranslate: "string";
   textExampleTranslate: "string";
 }
+
+export interface resultGame {
+  goodResult: CardInfo[];
+  badResult: CardInfo[];
+}

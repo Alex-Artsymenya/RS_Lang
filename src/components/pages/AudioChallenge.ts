@@ -1,25 +1,26 @@
 import Page from "./Page";
 import "../../scss/layout/_audioChallenge.scss";
 import { Request } from "../../services/Requests";
-import { Card } from "../common/WordCard";
-import { CardInfo } from "../common/interfaceList";
+import { CardInfo, resultGame } from "../common/interfaceList";
 import Utils from "../../services/Utils";
+
+const COUNT_LIFES = 5;
 
 class AudioChallenge implements Page {
   private hearts: number;
   private stateCard: CardInfo[];
   private stateCheck: number[];
-  private stateResult: CardInfo[];
+  private stateResult: resultGame;
   private counter: number;
   private timer: number;
 
   constructor() {
     this.timer = 0;
     this.counter = 0;
-    this.hearts = 5;
+    this.hearts = 1;
     this.stateCard = [];
     this.stateCheck = [];
-    this.stateResult = [];
+    this.stateResult = { goodResult: [], badResult: [] };
   }
 
   public async render(): Promise<string> {
@@ -96,13 +97,17 @@ class AudioChallenge implements Page {
       img.classList.add("img-close-btn");
       img.onclick = () => {
         elem.remove();
+        document.body.style.overflow = 'auto'
         clearTimeout(this.timer);
       };
       elem.append(img);
       const activeBtn = document.querySelector(
         ".test-audiochalenge .button"
       ) as HTMLElement;
-      document.querySelector("#page_container")?.append(elem);
+      document.querySelector(".main-wrapper")?.append(elem);
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+      this.hearts = COUNT_LIFES;
       this.CreateStateCard(parseInt(activeBtn.dataset.index as string));
     };
   }
@@ -117,6 +122,9 @@ class AudioChallenge implements Page {
     arrTextCards.forEach((el) => {
       if ((el as HTMLElement).dataset.infoID === sound.dataset.infoID) {
         el.classList.add("right_audio-chellenge");
+        this.stateResult.badResult.push(
+          this.stateCard[this.stateCheck[parseInt((el as HTMLElement).dataset.index as string)]]
+        );
       } else {
         el.classList.add("false_audio-chellenge");
       }
@@ -126,18 +134,31 @@ class AudioChallenge implements Page {
         el.classList.remove("right_audio-chellenge");
         el.classList.remove("false_audio-chellenge");
       });
-      this.addLogicForGame();
+      if (this.hearts === 0) {
+        this.renderResult();
+      } else {
+        this.addLogicForGame();
+      }
     }, 1000);
   }
 
   public async CreateStateCard(num: number) {
     this.clearState();
+    const downloadMenu = document.createElement('h2')
+    downloadMenu.classList.add('download-info')
+    document.querySelector('.layoutForAudioChallenge')?.append(downloadMenu)
+    downloadMenu.innerHTML = 'DOWNLOADING.'
+    const interval = setInterval(() => {
+      downloadMenu.innerHTML += '.'
+    }, 500);
     for (let i = 0; i < 30; i++) {
       const arrayCards = await Request.getWordsList({ group: num, page: i });
       this.stateCard.push(...arrayCards);
     }
+    clearInterval(interval)
+    downloadMenu.remove()
     this.createViewAudioChallenge();
-    this.shuffleArr(this.stateCard);
+    Utils.shuffleArr(this.stateCard);
     this.addLogicForGame();
   }
 
@@ -163,7 +184,6 @@ class AudioChallenge implements Page {
       clearTimeout(this.timer);
     }
     const timer = this.startTimer(5);
-    console.log(timer);
     const sound = document.querySelector(
       ".logo-sound_audio-chellenge"
     ) as HTMLElement;
@@ -181,19 +201,26 @@ class AudioChallenge implements Page {
         this.stateCheck.push(randomNumber);
       }
     }
-    this.shuffleArr(this.stateCheck);
+    Utils.shuffleArr(this.stateCheck);
     this.stateCheck.forEach((el, index) => {
       arrTextCards[index].innerHTML = this.stateCard[el].wordTranslate;
       (arrTextCards[index] as HTMLElement).dataset.infoID =
         this.stateCard[el].id;
+      (arrTextCards[index] as HTMLElement).dataset.index = index.toString();
       (arrTextCards[index] as HTMLElement).onclick = (event: Event) => {
         const elem = event.target as HTMLElement;
-        console.log("compare", elem.dataset.infoID === sound.dataset.infoID);
         if (elem.dataset.infoID === sound.dataset.infoID) {
           elem.classList.add("right_audio-chellenge");
+          const position = this.stateCheck.indexOf(this.counter);
+          this.stateResult.goodResult.push(
+            this.stateCard[this.stateCheck[position]]
+          );
         } else {
           elem.classList.add("false_audio-chellenge");
           const position = this.stateCheck.indexOf(this.counter);
+          this.stateResult.badResult.push(
+            this.stateCard[this.stateCheck[position]]
+          );
           arrTextCards[position].classList.add("right_audio-chellenge");
           this.minusHeart();
         }
@@ -203,7 +230,12 @@ class AudioChallenge implements Page {
             el.classList.remove("right_audio-chellenge");
             el.classList.remove("false_audio-chellenge");
           });
-          this.addLogicForGame();
+          if (this.hearts === 0) {
+            console.log(this.stateCheck);
+            this.renderResult();
+          } else {
+            this.addLogicForGame();
+          }
         }, 1000);
         this.counter += 1;
       };
@@ -269,18 +301,78 @@ class AudioChallenge implements Page {
     };
   }
 
+  public renderResult() {
+    document.querySelector(".block-for-game")?.remove();
+    document.querySelector(".heart_audio-chellenge")?.remove();
+    const mainBlock = document.querySelector(".layoutForAudioChallenge");
+    const body = document.createElement("div");
+    body.classList.add("body_result");
+    const bodyGoodResult = document.createElement("div");
+    bodyGoodResult.classList.add("body_good-result");
+    bodyGoodResult.innerHTML = `
+    <h4>You know <strong>${this.stateResult.goodResult.length}</strong> ${
+      this.stateResult.goodResult.length === 0 ||
+      this.stateResult.goodResult.length === 1
+        ? "word"
+        : "words"
+    }.</h4>
+    <div class="block-for-item_result"></div>
+    `;
+    const bodyBadResult = document.createElement("div");
+    bodyBadResult.classList.add("body_bad-result");
+    bodyBadResult.innerHTML = `
+    <h2>Training result</h2>
+    <h4>You have <strong>${this.stateResult.badResult.length}</strong> ${
+      this.stateResult.badResult.length === 0 ||
+      this.stateResult.badResult.length === 1
+        ? "mistake"
+        : "mistakes"
+    }.</h4>
+    <div class="block-for-item_result"></div>
+    `;
+
+    this.drawResultItems(
+      this.stateResult.badResult,
+      bodyBadResult.querySelector(".block-for-item_result") as HTMLElement
+    );
+    this.drawResultItems(
+      this.stateResult.goodResult,
+      bodyGoodResult.querySelector(".block-for-item_result") as HTMLElement
+    );
+
+    body.append(bodyBadResult, bodyGoodResult);
+    mainBlock?.append(body);
+  }
+
+  private drawResultItems(arr: CardInfo[], elem: HTMLElement) {
+    arr.forEach((el) => {
+      const divBlockForItem = document.createElement("div");
+      divBlockForItem.classList.add("block-for-item");
+
+      divBlockForItem.innerHTML = `
+    <a class="link-to-sound_result">
+      <img src="./assets/svg/volume-up.svg">
+      <audio src="${Utils.getFullURL("/") + el.audio}">
+    </a>
+    <p><strong>${el.word}</strong> -
+    ${el.wordTranslate} 
+    </p>
+    `;
+      const ahrefForAudio = divBlockForItem.querySelector("a") as HTMLElement;
+      ahrefForAudio.onclick = () => {
+        ahrefForAudio.querySelector("audio")?.play();
+      };
+      elem.append(divBlockForItem);
+    });
+  }
+
   private clearState(): void {
     this.stateCard = [];
     this.stateCheck = [];
-    this.stateResult = [];
+    this.stateResult = { goodResult: [], badResult: [] };
   }
 
-  private shuffleArr(array: unknown[]): void {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
+
 
   public async after_render(): Promise<void> {
     this.changeBtn();
