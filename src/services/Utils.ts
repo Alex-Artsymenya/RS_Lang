@@ -18,9 +18,9 @@ const Utils = {
     return url + hash;
   },
 
-  getRndInteger(min:number, max:number) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-  }
+  getRndInteger(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  },
 };
 
 export default Utils;

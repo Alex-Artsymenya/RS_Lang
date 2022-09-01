@@ -196,7 +196,7 @@ class Textbook implements Page {
 
   private updateGroupPage(): void {
     const hash = window.location.hash.split("/");
-    console.log(hash)
+    console.log(hash);
     if (hash[1] === "textbook" && hash.length === 4) {
       const groupX = Number(window.location.hash.split("/")[2]);
       const pageX = Number(window.location.hash.split("/")[3]);
