@@ -3,7 +3,7 @@ import Utils from "../../services/Utils";
 
 export interface Card {
   word: string;
-  translation: string;
+  wordTranslate: string;
   transcription: string;
   audio: string;
   image: string;
