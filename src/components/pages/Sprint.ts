@@ -25,6 +25,7 @@ class Sprint implements Page {
   static combo: Number[] = [];
   static totalPoint = 0;
   static point = 10;
+  static timer = 60;
 
   public static restore() {
     Sprint.indexWord = 0;
@@ -101,21 +102,20 @@ class Sprint implements Page {
       ".sprint__btn_start"
     ) as HTMLElement;
     startBtn.onclick = async () => {
-      await this.questionsGenerator();
+      const level = this.getWordsLevel();
       await Drawer.reDrawComponents(new GameLayout(), "sprint-section");
+      await this.questionsGenerator(level).then(() => {
+        const loader = document.querySelector(".loader-wrapper") as HTMLElement;
+        loader.remove();
+      });
       await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");
       Sprint.indexWord += 1;
     };
   }
 
 
-  public async questionsGenerator() {
-    const activeBtn = document.querySelector(
-      ".sprint__level .button"
-    ) as HTMLElement;
-    const words = await this.getWords(
-      parseInt(activeBtn.dataset.index as string)
-    );
+  public async questionsGenerator(level: string) {
+    const words = await this.getWords(parseInt(level))
     const arrQuestions: IQuestions[] = [];
     words.forEach((arr) => {
       let indexRand = 0;
@@ -180,56 +180,7 @@ class Sprint implements Page {
       });
     });
     Sprint.arrayOfQuestions = arrQuestions;
-    // console.log(arrQuestions);
-  }
-
-
-  public async startAudioChallenge() {
-    const startBtn = document.querySelector(
-      ".sprint__btn_start"
-    ) as HTMLElement;
-    startBtn.onclick = async () => {
-      const elem = document.createElement("div");
-      elem.classList.add("layoutForAudioChallenge");
-      const img = new Image();
-      img.src = "./../../assets/svg/close.svg";
-      img.classList.add("img-close-btn");
-      img.onclick = () => {
-        elem.remove();
-      };
-      elem.append(img);
-      const activeBtn = document.querySelector(
-        ".sprint__level .button"
-      ) as HTMLElement;
-      document.querySelector("#page_container")?.append(elem);
-      const words = await this.getWords(
-        parseInt(activeBtn.dataset.index as string)
-      );
-      const arrQuestions: IQuestions[] = [];
-      words.forEach((arr) => {
-        arr.forEach((el, index) => {
-          arrQuestions.push({
-            word: el.word,
-            variant:
-              words[0][Math.floor(Math.random() * (arr.length - index)) + index]
-                .wordTranslate,
-            answer: el.wordTranslate,
-          });
-        });
-      });
-      console.log(arrQuestions);
-      let result = "";
-      Promise.all(
-        arrQuestions.map(async (el) => {
-          const element = Drawer.drawComponent(SprintCard, el);
-          return element;
-        })
-      ).then((value) => {
-        result += value;
-        // console.log('result', result);
-        elem.innerHTML += result;
-      });
-    };
+    console.log(arrQuestions);
   }
 
   public async getWords(level: number) {
@@ -242,6 +193,13 @@ class Sprint implements Page {
     // console.log(localStorage);
     // console.log(card.flat())
     return card;
+  }
+
+  private getWordsLevel() {
+    const activeBtn = document.querySelector(
+      ".sprint__level .button"
+    ) as HTMLElement;
+    return activeBtn.dataset.index as string
   }
 
   public async after_render(): Promise<void> {

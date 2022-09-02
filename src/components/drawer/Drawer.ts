@@ -32,7 +32,7 @@ class Drawer {
   }
   static async reDrawComponents(component: Component, id: string) {
     const content: HTMLElement = document.getElementById(id) as HTMLElement;
-    console.log("content", content);
+    // console.log("content", content);
     content.innerHTML = "";
     content.innerHTML += await component.render();
     await component.after_render();

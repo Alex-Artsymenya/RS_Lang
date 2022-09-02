@@ -17,8 +17,15 @@ class GameLayout implements Component {
     const view = `
         <div class="game-layout" id="game-layout">
             <img src="./../../assets/svg/close.svg" class="img-close-btn">
-            <div class="game-layout__question_wrapper" id="game-layout__question_wrapper">
+            <div class="game-layout__wrapper">
+              <div class="loader-wrapper pl-wave">
+                <div class="loader">
+                  <span></span>
+                </div>
+              </div>
+              <div class="game-layout__question_wrapper" id="game-layout__question_wrapper">
 
+              </div>
             </div>
         </div>
     `;
