@@ -122,27 +122,54 @@ class Sprint implements Page {
       let lengthRand = 0;
       arr.forEach((el, index) => {
         switch (true) {
-          case index <= 5: {
+          case index <= 4: {
             indexRand = 0;
-            lengthRand = 5;
+            lengthRand = 4;
             break;
           }
-          case (5 < index && index <= 10): {
-            indexRand = 5;
-            lengthRand = 10;
+          case (4 < index && index <= 8): {
+            indexRand = 4;
+            lengthRand = 8;
             break;
           }
-          case (10 < index && index <= 15): {
-            indexRand = 10;
-            lengthRand = 15;
+          case (8 < index && index <= 12): {
+            indexRand = 8;
+            lengthRand = 12;
             break;
           }
-          case (index > 15): {
-            indexRand = 15;
+          case (12 < index && index <= 16): {
+            indexRand = 12;
+            lengthRand = 16;
+            break;
+          }
+          case (index > 16): {
+            indexRand = 16;
             lengthRand = 20;
             break;
           }
         }
+        // switch (true) {
+        //   case index <= 5: {
+        //     indexRand = 0;
+        //     lengthRand = 5;
+        //     break;
+        //   }
+        //   case (5 < index && index <= 10): {
+        //     indexRand = 5;
+        //     lengthRand = 10;
+        //     break;
+        //   }
+        //   case (10 < index && index <= 15): {
+        //     indexRand = 10;
+        //     lengthRand = 15;
+        //     break;
+        //   }
+        //   case (index > 15): {
+        //     indexRand = 15;
+        //     lengthRand = 20;
+        //     break;
+        //   }
+        // }
         arrQuestions.push({
           word: el.word,
           variant:
@@ -153,7 +180,7 @@ class Sprint implements Page {
       });
     });
     Sprint.arrayOfQuestions = arrQuestions;
-    console.log(arrQuestions);
+    // console.log(arrQuestions);
   }
 
 
