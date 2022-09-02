@@ -1,6 +1,7 @@
 import Component from "./Component";
 import "../../scss/components/_button.scss";
 import Sprint from "../pages/Sprint";
+import Drawer from "../drawer/Drawer";
 
 class GameLayout implements Component {
   //   private class: string;
@@ -38,6 +39,7 @@ class GameLayout implements Component {
     img.onclick = () => {
       gameLayout.remove();
       Sprint.restore();
+      Drawer.drawPage(new Sprint());
     };
     return;
   }
