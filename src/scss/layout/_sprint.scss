@@ -118,7 +118,23 @@
   
 }
 
-
+/* timer */
+.timer-wrapper {
+  visibility: hidden;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  border: 0.2rem solid rgb(0, 255, 255);
+}
+#timer__count {
+  margin: 0;
+  color: black;
+  // visibility: hidden;
+}
 /* Loader */
 @mixin transform($transform) {
   -webkit-transform: $transform;

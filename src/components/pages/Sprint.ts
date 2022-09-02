@@ -25,7 +25,7 @@ class Sprint implements Page {
   static combo: Number[] = [];
   static totalPoint = 0;
   static point = 10;
-  static timer = 60;
+  static time = 60;
 
   public static restore() {
     Sprint.indexWord = 0;
@@ -97,6 +97,54 @@ class Sprint implements Page {
       };
     });
   }
+
+  private timer(distance: number) {
+    (<HTMLElement>document.querySelector(".timer-wrapper")).style.visibility = 'visible';
+    let r = 0;
+    let g = 255;
+    let b = 255;
+    let colorInterval = 4.3;   
+    let idInterval = setInterval(function() {
+      (<HTMLElement>document.getElementById("timer__count")).innerHTML = distance + "s ";
+      (<HTMLElement>document.querySelector(".timer-wrapper")).style.border = `0.2rem solid rgb(${r += colorInterval}, ${g -= colorInterval}, ${b -= colorInterval})`;
+      distance -= 1;
+      // If the count down is over, write some text 
+      if (distance < 0) {
+        clearInterval(idInterval);
+        (<HTMLElement>document.getElementById("timer__count")).innerHTML = "EXPIRED";
+        const gameLayout = document.querySelector('.game-layout') as HTMLElement;
+        gameLayout.remove();
+        Sprint.restore();
+        Drawer.drawPage(new Sprint());
+      }
+    }, 1000);
+    localStorage.setItem('idIntervalSprint', JSON.stringify(idInterval));
+    // return x;
+    // let x = setInterval(function() {
+
+    //   // Get today's date and time
+    //   // var now = new Date().getTime();
+        
+    //   // Find the distance between now and the count down date
+    //   var distance = 60000;
+        
+    //   // Time calculations for days, hours, minutes and seconds
+    //   // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    //   // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //   // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+    //   // Output the result in an element with id="demo"
+    //   (<HTMLElement>document.getElementById("timer__count")).innerHTML = seconds + "s ";
+        
+    //   // If the count down is over, write some text 
+    //   if (distance < 0) {
+    //     clearInterval(x);
+    //     (<HTMLElement>document.getElementById("timer__count")).innerHTML = "EXPIRED";
+    //   }
+    // }, 1000);
+  }
+  
   public async startSprint() {
     const startBtn = document.querySelector(
       ".sprint__btn_start"
@@ -106,6 +154,7 @@ class Sprint implements Page {
       await Drawer.reDrawComponents(new GameLayout(), "sprint-section");
       await this.questionsGenerator(level).then(() => {
         const loader = document.querySelector(".loader-wrapper") as HTMLElement;
+        this.timer(Sprint.time);
         loader.remove();
       });
       await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");

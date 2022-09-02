@@ -23,6 +23,9 @@ class GameLayout implements Component {
                   <span></span>
                 </div>
               </div>
+              <div class="timer-wrapper">
+                <p id="timer__count">60s</p>
+              </div>
               <div class="game-layout__question_wrapper" id="game-layout__question_wrapper">
 
               </div>
@@ -46,6 +49,7 @@ class GameLayout implements Component {
     img.onclick = () => {
       gameLayout.remove();
       Sprint.restore();
+      clearInterval(localStorage.getItem('idIntervalSprint') ? localStorage.idIntervalSprint: null);
       Drawer.drawPage(new Sprint());
     };
     return;
