@@ -3,7 +3,6 @@ import Drawer from "./drawer/Drawer";
 import Button from "./common/Button";
 import AuthorizationForm from "./common/AuthorizationForm";
 import "../scss/layout/_header.scss";
-import { PopUp } from "../popup/popup";
 
 class Header implements Component {
   private class: string;

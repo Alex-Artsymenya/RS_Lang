@@ -1,5 +1,5 @@
 import Component from "./Component";
-import Utils from "../../services/Utils";
+// import Utils from "../../services/Utils";
 import Drawer from "../drawer/Drawer";
 import Button from "./Button";
 import Sprint from "../pages/Sprint";
@@ -68,24 +68,32 @@ class SprintCard implements Component {
   public async newQuestion() {
     setTimeout(async () => {
       try {
-        await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");
+        await Drawer.reDrawComponents(
+          new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]),
+          "game-layout__question_wrapper"
+        );
         Sprint.indexWord += 1;
       } catch (_) {
+        return;
       }
     }, 250);
   }
 
   public async checkCombo() {
-    const combo = document.querySelector('.sprint__questions_rounds');
-    const arrCombo = (<HTMLElement>combo).querySelectorAll('.sprint__questions_round') as NodeListOf<HTMLElement>;
+    const combo = document.querySelector(".sprint__questions_rounds");
+    const arrCombo = (<HTMLElement>combo).querySelectorAll(
+      ".sprint__questions_round"
+    ) as NodeListOf<HTMLElement>;
     if (Sprint.combo.length >= 4) {
       Sprint.combo = [];
       Sprint.point = Sprint.point * 2;
-    };
-    (<HTMLElement>document.getElementById('sprint-point')).textContent = `+${Sprint.point} per word`;
+    }
+    (<HTMLElement>(
+      document.getElementById("sprint-point")
+    )).textContent = `+${Sprint.point} per word`;
     Sprint.combo.forEach((el, index) => {
-      arrCombo[index].style.backgroundColor = 'green';
-    })
+      arrCombo[index].style.backgroundColor = "green";
+    });
     // switch (true) {
     //   case Sprint.combo.length === 1: {
     //     arrCombo[0].style.backgroundColor = 'green';
@@ -100,12 +108,12 @@ class SprintCard implements Component {
 
   public async checkQuestion(ev: HTMLElement) {
     switch (true) {
-      case (this.result && ev.id === 'btnTrue'): {
-        ev.classList.add('correct');
+      case this.result && ev.id === "btnTrue": {
+        ev.classList.add("correct");
         Sprint.rightAnswer.push({
           word: this.word,
           variant: this.variant,
-          answer: this.answer
+          answer: this.answer,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -113,12 +121,12 @@ class SprintCard implements Component {
         // await this.checkCombo();
         break;
       }
-      case (!this.result && ev.id === 'btnFalse'): {
-        ev.classList.add('correct');
+      case !this.result && ev.id === "btnFalse": {
+        ev.classList.add("correct");
         Sprint.rightAnswer.push({
           word: this.word,
           variant: this.variant,
-          answer: this.answer
+          answer: this.answer,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -126,13 +134,13 @@ class SprintCard implements Component {
         // await this.checkCombo();
         break;
       }
-    
+
       default: {
-        ev.classList.add('wrong');
+        ev.classList.add("wrong");
         Sprint.wrongAnswer.push({
           word: this.word,
           variant: this.variant,
-          answer: this.answer
+          answer: this.answer,
         });
         await this.newQuestion();
         Sprint.combo = [];

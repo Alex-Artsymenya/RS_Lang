@@ -22,6 +22,7 @@ module.exports = {
       {template: './index.html'}
     ),
     new ESLintPlugin(),
+    // new ESLintPlugin({ extensions: 'ts' }),
   ],
   module: {
     rules: [

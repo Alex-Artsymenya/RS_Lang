@@ -25,7 +25,7 @@ const routes: Record<string, Page> = {
 const errorPage: Error404 = new Error404();
 
 class Router {
-  private: any;
+  // private: any;
   private async router(): Promise<void> {
     // Get the parsed URl from the addressbar
     const request: Request = Utils.parseRequestURL();

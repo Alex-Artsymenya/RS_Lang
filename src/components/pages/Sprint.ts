@@ -18,15 +18,12 @@ class Sprint implements Page {
   // static indexWord: number;
   // static arrayOfQuestions: IQuestions[];
 
-  constructor() {
-
-  }
-  static indexWord: number = 0;
+  static indexWord = 0;
   static arrayOfQuestions: IQuestions[] = [];
-  static combo: Number[] = [];
+  static combo: number[] = [];
   static totalPoint = 0;
   static point = 10;
-  static time = 60;
+  static time = 5;
   static rightAnswer: IQuestions[] = [];
   static wrongAnswer: IQuestions[] = [];
 
@@ -86,7 +83,7 @@ class Sprint implements Page {
       document.querySelectorAll(".sprint__level a")
     ) as Array<HTMLElement>;
     arrBtn.forEach((el) => {
-      el.onclick = (event: Event) => {
+      el.onclick = () => {
         arrBtn.forEach((item) => {
           item.classList.add("button_grey");
           item.classList.remove("button");
@@ -102,55 +99,63 @@ class Sprint implements Page {
   }
 
   private timer(distance: number) {
-    (<HTMLElement>document.querySelector(".timer-wrapper")).style.visibility = 'visible';
+    (<HTMLElement>document.querySelector(".timer-wrapper")).style.visibility =
+      "visible";
     let r = 0;
     let g = 255;
     let b = 255;
-    let colorInterval = 4.3;   
-    let idInterval = setInterval(async function() {
-      (<HTMLElement>document.getElementById("timer__count")).innerHTML = distance + "s ";
-      (<HTMLElement>document.querySelector(".timer-wrapper")).style.border = `0.2rem solid rgb(${r += colorInterval}, ${g -= colorInterval}, ${b -= colorInterval})`;
+    const colorInterval = 4.3;
+    const idInterval = setInterval(async function () {
+      (<HTMLElement>document.getElementById("timer__count")).innerHTML =
+        distance + "s ";
+      (<HTMLElement>(
+        document.querySelector(".timer-wrapper")
+      )).style.border = `0.2rem solid rgb(${(r += colorInterval)}, ${(g -=
+        colorInterval)}, ${(b -= colorInterval)})`;
       distance -= 1;
-      // If the count down is over, write some text 
+      // If the count down is over, write some text
       if (distance < 0) {
         clearInterval(idInterval);
-        (<HTMLElement>document.getElementById("timer__count")).innerHTML = "EXPIRED";
-        const gameLayout = document.querySelector('.game-layout') as HTMLElement;
+        (<HTMLElement>document.getElementById("timer__count")).innerHTML =
+          "EXPIRED";
+        const gameLayout = document.querySelector(
+          ".game-layout"
+        ) as HTMLElement;
         gameLayout.remove();
         Sprint.restore();
         // Drawer.drawPage(new Sprint());
         await Drawer.reDrawComponents(new ResultLayout(), "sprint-section");
-        console.log('SPRINT--> RightAnsw -->', Sprint.rightAnswer);
-        console.log('SPRINT--> WrongAnsw -->', Sprint.wrongAnswer);
+        console.log("SPRINT--> RightAnsw -->", Sprint.rightAnswer);
+        console.log("SPRINT--> WrongAnsw -->", Sprint.wrongAnswer);
       }
     }, 1000);
-    localStorage.setItem('idIntervalSprint', JSON.stringify(idInterval));
+    localStorage.setItem("idIntervalSprint", JSON.stringify(idInterval));
     // return x;
     // let x = setInterval(function() {
 
     //   // Get today's date and time
     //   // var now = new Date().getTime();
-        
+
     //   // Find the distance between now and the count down date
     //   var distance = 60000;
-        
+
     //   // Time calculations for days, hours, minutes and seconds
     //   // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
     //   // var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     //   // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     //   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
+
     //   // Output the result in an element with id="demo"
     //   (<HTMLElement>document.getElementById("timer__count")).innerHTML = seconds + "s ";
-        
-    //   // If the count down is over, write some text 
+
+    //   // If the count down is over, write some text
     //   if (distance < 0) {
     //     clearInterval(x);
     //     (<HTMLElement>document.getElementById("timer__count")).innerHTML = "EXPIRED";
     //   }
     // }, 1000);
   }
-  
+
   public async startSprint() {
     const startBtn = document.querySelector(
       ".sprint__btn_start"
@@ -163,14 +168,16 @@ class Sprint implements Page {
         this.timer(Sprint.time);
         loader.remove();
       });
-      await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");
+      await Drawer.reDrawComponents(
+        new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]),
+        "game-layout__question_wrapper"
+      );
       Sprint.indexWord += 1;
     };
   }
 
-
   public async questionsGenerator(level: string) {
-    const words = await this.getWords(parseInt(level))
+    const words = await this.getWords(parseInt(level));
     const arrQuestions: IQuestions[] = [];
     words.forEach((arr) => {
       let indexRand = 0;
@@ -182,22 +189,22 @@ class Sprint implements Page {
             lengthRand = 4;
             break;
           }
-          case (4 < index && index <= 8): {
+          case 4 < index && index <= 8: {
             indexRand = 4;
             lengthRand = 8;
             break;
           }
-          case (8 < index && index <= 12): {
+          case 8 < index && index <= 12: {
             indexRand = 8;
             lengthRand = 12;
             break;
           }
-          case (12 < index && index <= 16): {
+          case 12 < index && index <= 16: {
             indexRand = 12;
             lengthRand = 16;
             break;
           }
-          case (index > 16): {
+          case index > 16: {
             indexRand = 16;
             lengthRand = 20;
             break;
@@ -228,8 +235,9 @@ class Sprint implements Page {
         arrQuestions.push({
           word: el.word,
           variant:
-            arr[Math.floor(Math.random() * (lengthRand - indexRand)) + indexRand]
-            .wordTranslate,
+            arr[
+              Math.floor(Math.random() * (lengthRand - indexRand)) + indexRand
+            ].wordTranslate,
           answer: el.wordTranslate,
         });
       });
@@ -254,7 +262,7 @@ class Sprint implements Page {
     const activeBtn = document.querySelector(
       ".sprint__level .button"
     ) as HTMLElement;
-    return activeBtn.dataset.index as string
+    return activeBtn.dataset.index as string;
   }
 
   public async after_render(): Promise<void> {

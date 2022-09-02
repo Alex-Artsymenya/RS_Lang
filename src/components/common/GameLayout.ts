@@ -44,12 +44,16 @@ class GameLayout implements Component {
   //   }
 
   public async after_render(): Promise<void> {
-    const img = document.querySelector('.img-close-btn') as HTMLElement;
-    const gameLayout = document.querySelector('.game-layout') as HTMLElement;
+    const img = document.querySelector(".img-close-btn") as HTMLElement;
+    const gameLayout = document.querySelector(".game-layout") as HTMLElement;
     img.onclick = () => {
       gameLayout.remove();
       Sprint.restore();
-      clearInterval(localStorage.getItem('idIntervalSprint') ? localStorage.idIntervalSprint: null);
+      clearInterval(
+        localStorage.getItem("idIntervalSprint")
+          ? localStorage.idIntervalSprint
+          : null
+      );
       Drawer.drawPage(new Sprint());
     };
     return;

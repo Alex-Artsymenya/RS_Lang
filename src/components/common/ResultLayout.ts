@@ -19,19 +19,19 @@ class ResultLayout implements Component {
           <p>${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
         </div>
     `;
-    let wrongAnswers = '';
+    let wrongAnswers = "";
     Sprint.wrongAnswer.forEach((el) => {
       wrongAnswers += wrongAnswer(el);
-    })
+    });
     const correctAnswer = (question: IQuestions) => `
       <div class="result-layout__correct-word">
         <p>${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
       </div>
     `;
-    let correctAnswers = '';
+    let correctAnswers = "";
     Sprint.rightAnswer.forEach((el) => {
       correctAnswers += correctAnswer(el);
-    })
+    });
     const view = `
         <div class="result-layout" id="result-layout">
             <img src="./../../assets/svg/close.svg" class="img-close-btn">
@@ -52,8 +52,8 @@ class ResultLayout implements Component {
   }
 
   public async after_render(): Promise<void> {
-    const img = document.querySelector('.img-close-btn') as HTMLElement;
-    const gameLayout = document.querySelector('.result-layout') as HTMLElement;
+    const img = document.querySelector(".img-close-btn") as HTMLElement;
+    const gameLayout = document.querySelector(".result-layout") as HTMLElement;
     img.onclick = () => {
       gameLayout.remove();
       Sprint.restore();

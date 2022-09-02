@@ -1,11 +1,17 @@
+// import { authorizationFormType } from "../common/AuthorizationForm";
 import Component from "../common/Component";
 import Page from "../pages/Page";
-
+interface IDrawer {
+  id?: string;
+  class?: string;
+  text?: string;
+}
 class Drawer {
   static renderComponentStack: Component[] = [];
 
   static async drawComponent(
     componentClass: new (options: any) => Component,
+    // componentClass: new (options) => Component,
     options = {}
   ) {
     const component: Component = new componentClass(options);

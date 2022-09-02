@@ -9,12 +9,12 @@ export enum Difficulty {
   HARD,
 }
 export class Request {
-  static createUser(arg0: { name: string; email: string; password: string }) {
-    throw new Error("Method not implemented.");
-  }
-  static loginUser(arg0: { email: string; password: string }) {
-    throw new Error("Method not implemented.");
-  }
+  // static createUser(arg0: { name: string; email: string; password: string }) {
+  //   throw new Error("Method not implemented.");
+  // }
+  // static loginUser(arg0: { email: string; password: string }) {
+  //   throw new Error("Method not implemented.");
+  // }
   // 1. Получить слова определенной группы, определенной страницы
   static async getWordsList(options: { group?: number; page?: number }) {
     const rawResponse = await fetch(
