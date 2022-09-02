@@ -67,8 +67,11 @@ class SprintCard implements Component {
 
   public async newQuestion() {
     setTimeout(async () => {
-      await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");
-      Sprint.indexWord += 1;
+      try {
+        await Drawer.reDrawComponents(new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]), "game-layout__question_wrapper");
+        Sprint.indexWord += 1;
+      } catch (_) {
+      }
     }, 250);
   }
 
@@ -146,7 +149,8 @@ class SprintCard implements Component {
     ) as NodeListOf<HTMLElement>;
     btnArr.forEach((btn) => {
       // btn.classList.add('wrong');
-      btn.addEventListener("click", async () => this.checkQuestion(btn));
+      btn.onclick = async () => await this.checkQuestion(btn);
+      // btn.addEventListener("click", async () => this.checkQuestion(btn));
     });
     this.checkCombo();
   }
