@@ -118,18 +118,42 @@ class Sprint implements Page {
     );
     const arrQuestions: IQuestions[] = [];
     words.forEach((arr) => {
+      let indexRand = 0;
+      let lengthRand = 0;
       arr.forEach((el, index) => {
+        switch (true) {
+          case index <= 5: {
+            indexRand = 0;
+            lengthRand = 5;
+            break;
+          }
+          case (5 < index && index <= 10): {
+            indexRand = 5;
+            lengthRand = 10;
+            break;
+          }
+          case (10 < index && index <= 15): {
+            indexRand = 10;
+            lengthRand = 15;
+            break;
+          }
+          case (index > 15): {
+            indexRand = 15;
+            lengthRand = 20;
+            break;
+          }
+        }
         arrQuestions.push({
           word: el.word,
           variant:
-            arr[Math.floor(Math.random() * (arr.length - index)) + index]
-              .wordTranslate,
+            arr[Math.floor(Math.random() * (lengthRand - indexRand)) + indexRand]
+            .wordTranslate,
           answer: el.wordTranslate,
         });
       });
     });
     Sprint.arrayOfQuestions = arrQuestions;
-    // console.log(arrQuestions);
+    console.log(arrQuestions);
   }
 
 
