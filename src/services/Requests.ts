@@ -3,17 +3,17 @@ import Utils from "./Utils";
 const url = Utils.getFullURL("");
 
 export enum Difficulty {
-  LEARNED,  // добавлено в изученное
-  NORMAL,   // Не добавлено в изученное/сложное
-  HARD,     // добавлено в сложное
+  LEARNED, // добавлено в изученное
+  NORMAL, // Не добавлено в изученное/сложное
+  HARD, // добавлено в сложное
 }
 export class Request {
-   static createUser(arg0: { name: string; email: string; password: string }) {
+  static createUser(arg0: { name: string; email: string; password: string }) {
     throw new Error("Method not implemented.");
   }
   static loginUser(arg0: { email: string; password: string }) {
     throw new Error("Method not implemented.");
-  } 
+  }
   // 1. Получить слова определенной группы, определенной страницы
   static async getWordsList(options: { group?: number; page?: number }) {
     const rawResponse = await fetch(
@@ -46,19 +46,19 @@ export class Request {
     token: string,
     wordid: string,
     difficulty: Difficulty,
-    correctInRow: number //при добавлении в список сложных/изученных вручную не нужен. Только в играх.
+    correctInRow: number
   ) {
     const rawResponse = await fetch(`${url}/users/${id}/words/${wordid}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        Accept: 'application/json',
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         difficulty: `${difficulty}`,
         optional: {
-          correctInRow: `${correctInRow}`
+          correctInRow: `${correctInRow}`,
         },
       }),
     });
@@ -72,16 +72,16 @@ export class Request {
     wordid: string
   ) {
     const rawResponse = await fetch(`${url}/users/${id}/words/${wordid}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        Accept: 'application/json',
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
     const content = await rawResponse.json();
     return content;
   }
-  //5. Получить слова определенной группы, определенной страницы c возможностью фильтрации
+  //5.
   static async getAggregatedWordsList(options: {
     id: string;
     token: string;
@@ -90,19 +90,21 @@ export class Request {
     wordsPerPage?: number;
     filter?: string;
   }) {
-    const filterGroup = options.group ? `&group=${options.group}` : '';
-    const filterPage = options.page ? `&page=${options.page}` : '';
+    const filterGroup = options.group ? `&group=${options.group}` : "";
+    const filterPage = options.page ? `&page=${options.page}` : "";
     const filterWordsPerPage = options.wordsPerPage
-      ? `&wordsPerPage=${options.wordsPerPage}`: '';
-    const filterFilter = options.filter ? `&filter=${options.filter}` : '';
-    const sumFilter = filterGroup + filterPage + filterWordsPerPage + filterFilter;
-    const finalFilter = sumFilter ? `?${sumFilter.slice(1)}` : '';
+      ? `&wordsPerPage=${options.wordsPerPage}`
+      : "";
+    const filterFilter = options.filter ? `&filter=${options.filter}` : "";
+    const sumFilter =
+      filterGroup + filterPage + filterWordsPerPage + filterFilter;
+    const finalFilter = sumFilter ? `?${sumFilter.slice(1)}` : "";
     const rawResponse = await fetch(
       `${url}/users/${options.id}/aggregatedWords${finalFilter}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
           Authorization: `Bearer ${options.token}`,
         },
       }
@@ -114,14 +116,14 @@ export class Request {
     id: string,
     token: string,
     wordid: string,
-    difficulty: Difficulty,
+    difficulty: Difficulty
   ) {
     const rawResponse = await fetch(`${url}/users/${id}/words/${wordid}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         difficulty: `${difficulty}`,

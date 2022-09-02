@@ -21,7 +21,11 @@ class Header implements Component {
     const authorizationButton = await Drawer.drawComponent(Button, {
       id: "authorization-button",
       class: "header__button",
-      text: `${AuthorizationForm.isAuthorized ? `Log out: ${localStorage.getItem('name')}` : "Log in"}`,
+      text: `${
+        AuthorizationForm.isAuthorized
+          ? `Log out: ${localStorage.getItem("name")}`
+          : "Log in"
+      }`,
     });
 
     const page = localStorage.getItem("rslang_current_page") || 0;
@@ -76,7 +80,7 @@ class Header implements Component {
       "authorization-button"
     ) as HTMLElement;
     if (AuthorizationForm.isAuthorized) {
-      button.innerHTML = `Log out: ${localStorage.getItem('name')}`;
+      button.innerHTML = `Log out: ${localStorage.getItem("name")}`;
     }
     const form = document.getElementById("authorization-form") as HTMLElement;
     const inputs = document.querySelectorAll(
