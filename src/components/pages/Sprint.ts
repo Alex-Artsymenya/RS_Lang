@@ -5,9 +5,10 @@ import Request from "../../services/Requests";
 import SprintCard from "../common/SprintCard";
 import Drawer from "../drawer/Drawer";
 import GameLayout from "../common/GameLayout";
+import ResultLayout from "../common/ResultLayout";
 // import "./../../assets/svg/close.svg"
 
-interface IQuestions {
+export interface IQuestions {
   word: string;
   variant: string;
   answer: string;
@@ -26,6 +27,8 @@ class Sprint implements Page {
   static totalPoint = 0;
   static point = 10;
   static time = 60;
+  static rightAnswer: IQuestions[] = [];
+  static wrongAnswer: IQuestions[] = [];
 
   public static restore() {
     Sprint.indexWord = 0;
@@ -104,7 +107,7 @@ class Sprint implements Page {
     let g = 255;
     let b = 255;
     let colorInterval = 4.3;   
-    let idInterval = setInterval(function() {
+    let idInterval = setInterval(async function() {
       (<HTMLElement>document.getElementById("timer__count")).innerHTML = distance + "s ";
       (<HTMLElement>document.querySelector(".timer-wrapper")).style.border = `0.2rem solid rgb(${r += colorInterval}, ${g -= colorInterval}, ${b -= colorInterval})`;
       distance -= 1;
@@ -115,7 +118,10 @@ class Sprint implements Page {
         const gameLayout = document.querySelector('.game-layout') as HTMLElement;
         gameLayout.remove();
         Sprint.restore();
-        Drawer.drawPage(new Sprint());
+        // Drawer.drawPage(new Sprint());
+        await Drawer.reDrawComponents(new ResultLayout(), "sprint-section");
+        console.log('SPRINT--> RightAnsw -->', Sprint.rightAnswer);
+        console.log('SPRINT--> WrongAnsw -->', Sprint.wrongAnswer);
       }
     }, 1000);
     localStorage.setItem('idIntervalSprint', JSON.stringify(idInterval));

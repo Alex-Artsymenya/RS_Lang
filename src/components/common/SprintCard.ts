@@ -99,6 +99,11 @@ class SprintCard implements Component {
     switch (true) {
       case (this.result && ev.id === 'btnTrue'): {
         ev.classList.add('correct');
+        Sprint.rightAnswer.push({
+          word: this.word,
+          variant: this.variant,
+          answer: this.answer
+        });
         await this.newQuestion();
         Sprint.combo.push(1);
         Sprint.totalPoint += Sprint.point;
@@ -107,6 +112,11 @@ class SprintCard implements Component {
       }
       case (!this.result && ev.id === 'btnFalse'): {
         ev.classList.add('correct');
+        Sprint.rightAnswer.push({
+          word: this.word,
+          variant: this.variant,
+          answer: this.answer
+        });
         await this.newQuestion();
         Sprint.combo.push(1);
         Sprint.totalPoint += Sprint.point;
@@ -116,6 +126,11 @@ class SprintCard implements Component {
     
       default: {
         ev.classList.add('wrong');
+        Sprint.wrongAnswer.push({
+          word: this.word,
+          variant: this.variant,
+          answer: this.answer
+        });
         await this.newQuestion();
         Sprint.combo = [];
         Sprint.point = 10;
