@@ -37,9 +37,7 @@ class GameLayout implements Component {
     const gameLayout = document.querySelector('.game-layout') as HTMLElement;
     img.onclick = () => {
       gameLayout.remove();
-      Sprint.arrayOfQuestions = [];
-      Sprint.indexWord = 0;
-      Sprint.combo = [];
+      Sprint.restore();
     };
     return;
   }

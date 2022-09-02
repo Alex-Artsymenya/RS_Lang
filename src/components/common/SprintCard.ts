@@ -46,11 +46,13 @@ class SprintCard implements Component {
     });
     const view = `
       <div class="sprint__questions">
+        <p>Total point - ${Sprint.totalPoint}</p>
         <div class="sprint__questions_rounds">
           <div class="sprint__questions_round"></div>
           <div class="sprint__questions_round"></div>
           <div class="sprint__questions_round"></div>
         </div>
+        <p id="sprint-point">+${Sprint.point} per word</p>
         <h4 class="sprint__questions_quest">${this.word}</h4>
         <h5 class="sprint__questions_answ">${this.variant}</h5>
       </div>
@@ -75,7 +77,9 @@ class SprintCard implements Component {
     const arrCombo = (<HTMLElement>combo).querySelectorAll('.sprint__questions_round') as NodeListOf<HTMLElement>;
     if (Sprint.combo.length >= 4) {
       Sprint.combo = [];
-    }
+      Sprint.point = Sprint.point * 2;
+    };
+    (<HTMLElement>document.getElementById('sprint-point')).textContent = `+${Sprint.point} per word`;
     Sprint.combo.forEach((el, index) => {
       arrCombo[index].style.backgroundColor = 'green';
     })
@@ -97,6 +101,7 @@ class SprintCard implements Component {
         ev.classList.add('correct');
         await this.newQuestion();
         Sprint.combo.push(1);
+        Sprint.totalPoint += Sprint.point;
         // await this.checkCombo();
         break;
       }
@@ -104,6 +109,7 @@ class SprintCard implements Component {
         ev.classList.add('correct');
         await this.newQuestion();
         Sprint.combo.push(1);
+        Sprint.totalPoint += Sprint.point;
         // await this.checkCombo();
         break;
       }
@@ -112,6 +118,7 @@ class SprintCard implements Component {
         ev.classList.add('wrong');
         await this.newQuestion();
         Sprint.combo = [];
+        Sprint.point = 10;
         break;
       }
     }

@@ -23,6 +23,16 @@ class Sprint implements Page {
   static indexWord: number = 0;
   static arrayOfQuestions: IQuestions[] = [];
   static combo: Number[] = [];
+  static totalPoint = 0;
+  static point = 10;
+
+  public static restore() {
+    Sprint.indexWord = 0;
+    Sprint.arrayOfQuestions = [];
+    Sprint.combo = [];
+    Sprint.totalPoint = 0;
+    Sprint.point = 10;
+  }
 
   public async render(): Promise<string> {
     console.log(Sprint.arrayOfQuestions);
