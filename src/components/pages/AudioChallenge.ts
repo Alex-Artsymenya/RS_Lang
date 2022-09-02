@@ -89,6 +89,7 @@ class AudioChallenge implements Page {
     const startBtn = document.querySelector(
       ".start_audiochallenge"
     ) as HTMLElement;
+    this.keyDownEventlistener();
     startBtn.onclick = () => {
       const elem = document.createElement("div");
       elem.classList.add("layoutForAudioChallenge");
@@ -133,6 +134,7 @@ class AudioChallenge implements Page {
       arrTextCards.forEach((el) => {
         el.classList.remove("right_audio-chellenge");
         el.classList.remove("false_audio-chellenge");
+        this.changingBtnDisabled('.text_audio-chellenge', false)
       });
       if (this.hearts === 0) {
         this.renderResult();
@@ -165,6 +167,7 @@ class AudioChallenge implements Page {
   public startTimer(num = 5) {
     const timer = setTimeout(() => {
       this.minusHeart();
+      this.changingBtnDisabled('.text_audio-chellenge')
       this.counter += 1;
       this.veiwRigthChoose();
     }, num * 1000);
@@ -209,6 +212,7 @@ class AudioChallenge implements Page {
       (arrTextCards[index] as HTMLElement).dataset.index = index.toString();
       (arrTextCards[index] as HTMLElement).onclick = (event: Event) => {
         const elem = event.target as HTMLElement;
+        this.changingBtnDisabled('.text_audio-chellenge')
         if (elem.dataset.infoID === sound.dataset.infoID) {
           elem.classList.add("right_audio-chellenge");
           const position = this.stateCheck.indexOf(this.counter);
@@ -229,6 +233,7 @@ class AudioChallenge implements Page {
           arrTextCards.forEach((el) => {
             el.classList.remove("right_audio-chellenge");
             el.classList.remove("false_audio-chellenge");
+            this.changingBtnDisabled('.text_audio-chellenge', false)
           });
           if (this.hearts === 0) {
             console.log(this.stateCheck);
@@ -240,6 +245,17 @@ class AudioChallenge implements Page {
         this.counter += 1;
       };
     });
+  }
+  
+  public changingBtnDisabled(str: string, check: boolean = true) {
+    const arrBtn = document.querySelectorAll(str)
+    arrBtn.forEach(el => {
+      if(check){
+        el.classList.add('disabled')
+      } else {
+        el.classList.remove('disabled')
+      }
+    })
   }
 
   public createViewAudioChallenge() {
@@ -344,6 +360,33 @@ class AudioChallenge implements Page {
     mainBlock?.append(body);
   }
 
+  public keyDownEventlistener() {
+    document.addEventListener('keydown', (event: KeyboardEvent)=>{
+      const key = event.code
+      const digitKeys = document.querySelectorAll('.text_audio-chellenge');
+      const clickEvent = new Event('click')
+      switch (key) {
+        case 'Digit1':
+          digitKeys[0].dispatchEvent(clickEvent)
+          break;
+        case 'Digit2':
+          digitKeys[1].dispatchEvent(clickEvent)
+          break;
+        case 'Digit3':
+          digitKeys[2].dispatchEvent(clickEvent)
+          break;
+        case 'Digit4':
+          digitKeys[3].dispatchEvent(clickEvent)
+          break;
+        case 'Space':
+          document.querySelector('.logo-sound_audio-chellenge')?.dispatchEvent(clickEvent)
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   private drawResultItems(arr: CardInfo[], elem: HTMLElement) {
     arr.forEach((el) => {
       const divBlockForItem = document.createElement("div");
@@ -382,3 +425,8 @@ class AudioChallenge implements Page {
 }
 
 export default AudioChallenge;
+
+
+// document.addEventListener('keydown', (event)=> {
+//   console.log(event.target)
+// })
