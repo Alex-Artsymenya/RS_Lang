@@ -160,6 +160,7 @@ class AudioChallenge implements Page {
     clearInterval(interval)
     downloadMenu.remove()
     this.createViewAudioChallenge();
+    this.drawKeyHelper()
     Utils.shuffleArr(this.stateCard);
     this.addLogicForGame();
   }
@@ -385,6 +386,23 @@ class AudioChallenge implements Page {
           break;
       }
     })
+  }
+
+  public drawKeyHelper() {
+    const mainWindow = document.querySelector('.block-for-game')
+    const viewHelper = document.createElement('div')
+    viewHelper.classList.add('helper-window');
+    viewHelper.innerHTML = `
+    <h4>You can use follow keys:</h4>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>Space</li>
+    </ul>
+    `
+    mainWindow?.append(viewHelper)
   }
 
   private drawResultItems(arr: CardInfo[], elem: HTMLElement) {

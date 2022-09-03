@@ -245,3 +245,32 @@
 .disabled {
   pointer-events: none;
 }
+
+.helper-window {
+  background-color: #ccffff;
+  border: solid black 2px;
+  color: black;
+  padding: 15px;
+  border-radius: 10px;
+
+  h4 {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+  ul {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+    
+    li {      
+      border: solid 2px #436b6b;
+      padding: 7px;
+      border-radius: 5px;
+      background-color: #7da7a7;
+      font-size: 12px;
+    }
+  }
+}
