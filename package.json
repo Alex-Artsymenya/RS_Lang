@@ -9,7 +9,8 @@
     "watch": "webpack --mode development --watch",
     "lint": "eslint ./src",
     "lintfix": "eslint --fix ./src",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "deploy": "gh-pages -d ../RS_Lang/dist -e rslang"
   },
   "keywords": [
     "english",
@@ -27,6 +28,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-webpack-plugin": "^3.2.0",
+    "gh-pages": "^4.0.0",
     "html-loader": "^3.1.2",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.7.1",

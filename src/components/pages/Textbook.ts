@@ -1,20 +1,17 @@
 import Page from "./Page";
 import Drawer from "../drawer/Drawer";
 import WordCard from "../common/WordCard";
-import Request from "../../services/Requests";
+import Request, { Difficulty } from "../../services/Requests";
 import "../../scss/layout/_textbook.scss";
 import { Card } from "../common/WordCard";
+import AuthorizationForm from "../common/AuthorizationForm";
+import Utils from "../../services/Utils";
 
 class Textbook implements Page {
   private showActiveGroupButton(): void {
     const buttons = document.querySelectorAll(".textbook__button");
     const hash = window.location.hash.split("/");
-    let groupX = 0;
-    if (hash[2] === "info") {
-      groupX = 7;
-    } else {
-      groupX = Number(window.location.hash.split("/")[2]);
-    }
+    const groupX = hash[2] === "info" ? 7 : Number(hash[2]);
     buttons.forEach((el) => el.classList.remove("button"));
     buttons.forEach((el) => el.classList.add("button_grey"));
     buttons[groupX].classList.remove("button_grey");
@@ -22,23 +19,69 @@ class Textbook implements Page {
   }
 
   public async render(): Promise<string> {
-    const groupX =
-      Number(window.location.hash.split("/")[2]) ||
-      (Number(window.location.hash.split("/")[2]) === 0 ? 0 : 7);
-    const pageX = Number(window.location.hash.split("/")[3]);
+    const url = Utils.parseRequestURL();
+    const groupX = Number(url.id) || (Number(url.id) === 0 ? 0 : 7);
+    const pageX = Number(url.verb);
+    const userInfo: string | null = localStorage.getItem("userInfo");
+    let currentId = "";
+    let currentToken = "";
+    if (userInfo) {
+      AuthorizationForm.authorizationInfo = JSON.parse(userInfo);
+      currentId = AuthorizationForm.authorizationInfo.userId;
+      currentToken = AuthorizationForm.authorizationInfo.token;
+    }
     const pageMinus = pageX > 0 ? pageX - 1 : pageX;
     const pagePlus = pageX < 29 ? pageX + 1 : pageX;
-    const res: Card[] = await Request.getWordsList({
-      group: groupX,
-      page: pageX,
-    });
+    const res: Card[] =
+      groupX === 6 && AuthorizationForm.isAuthorized
+        ? await Request.getAggregatedWordsList({
+            id: currentId,
+            token: currentToken,
+            filter: '{"userWord.difficulty":"2"}',
+          })
+        : await Request.getWordsList({ group: groupX, page: pageX });
+    const arrayLength: number =
+      groupX === 6 && AuthorizationForm.isAuthorized
+        ? res[0].paginatedResults.length
+        : res.length;
     let result = "";
-    for (let i = 0; i < res.length; i += 1) {
-      result += await Drawer.drawComponent(WordCard, res[i]);
+    let total_diff = 0;
+    for (let i = 0; i < arrayLength; i += 1) {
+      if (groupX === 6 && AuthorizationForm.isAuthorized) {
+        result += await Drawer.drawComponent(
+          WordCard,
+          res[0].paginatedResults[i]
+        );
+      } else {
+        if (AuthorizationForm.isAuthorized) {
+          let wordDiff: number;
+          try {
+            const ans = await Request.getWordFromUserWordsList(
+              currentId,
+              currentToken,
+              res[i].id
+            );
+            wordDiff = Number(ans.difficulty);
+            total_diff += wordDiff;
+          } catch {
+            wordDiff = 1;
+            await Request.SetWordInUsersList(
+              currentId,
+              currentToken,
+              res[i].id,
+              Difficulty.NORMAL
+            );
+            total_diff += wordDiff;
+          }
+          res[i].diff = wordDiff;
+        }
+        result += await Drawer.drawComponent(WordCard, res[i]);
+      }
     }
+    localStorage.setItem(
+      "rslang-current-page-total-difficulty",`${total_diff}`);
     const logStatus = (
-      document.getElementById("authorization-button") as HTMLElement
-    ).innerHTML;
+      document.getElementById("authorization-button") as HTMLElement).innerHTML;
     result = result
       ? result
       : logStatus === "Log in"
@@ -120,30 +163,14 @@ class Textbook implements Page {
     <div class="textbook-navigation">
       <div class="wrapper textbook-navigation__wrapper">
         <div class="navigation-buttons">
-          <a href="/#/textbook/0/0" class="${
-            groupX === 0 ? "button" : "button_grey"
-          } textbook__button">A1</a>
-          <a href="/#/textbook/1/0" class="${
-            groupX === 1 ? "button" : "button_grey"
-          } textbook__button">A2</a>
-          <a href="/#/textbook/2/0" class="${
-            groupX === 2 ? "button" : "button_grey"
-          } textbook__button">B1</a>
-          <a href="/#/textbook/3/0" class="${
-            groupX === 3 ? "button" : "button_grey"
-          } textbook__button">B2</a>
-          <a href="/#/textbook/4/0" class="${
-            groupX === 4 ? "button" : "button_grey"
-          } textbook__button">C1</a>
-          <a href="/#/textbook/5/0" class="${
-            groupX === 5 ? "button" : "button_grey"
-          } textbook__button">C2</a>
-          <a href="/#/textbook/6/0" class="${
-            groupX === 6 ? "button" : "button_grey"
-          } textbook__button">User words</a>
-          <a href="/#/textbook/info/0" class="${
-            groupX === 7 ? "button" : "button_grey"
-          } textbook__button">info</a>
+          <a href="/#/textbook/0/0" class="${groupX === 0 ? "button" : "button_grey"} textbook__button">A1</a>
+          <a href="/#/textbook/1/0" class="${groupX === 1 ? "button" : "button_grey"} textbook__button">A2</a>
+          <a href="/#/textbook/2/0" class="${groupX === 2 ? "button" : "button_grey"} textbook__button">B1</a>
+          <a href="/#/textbook/3/0" class="${groupX === 3 ? "button" : "button_grey"} textbook__button">B2</a>
+          <a href="/#/textbook/4/0" class="${groupX === 4 ? "button" : "button_grey"} textbook__button">C1</a>
+          <a href="/#/textbook/5/0" class="${groupX === 5 ? "button" : "button_grey"} textbook__button">C2</a>
+          <a href="/#/textbook/6/0" class="${groupX === 6 ? "button" : "button_grey"} textbook__button">User words</a>
+          <a href="/#/textbook/info/0" class="${groupX === 7 ? "button" : "button_grey"} textbook__button">info</a>
         </div>
       </div>
     </div>
@@ -151,19 +178,16 @@ class Textbook implements Page {
       ${groupX === 7 ? info : result}
     </section>
     <section>
-      <div class="wrapper page-changer__wrapper" style="${
-        groupX === 6 || groupX === 7 ? "display:none" : ""
-      }">
-        
+      <div class="wrapper page-changer__wrapper" style="${groupX === 6 || groupX === 7 ? "display:none" : ""}">
+        <a href="/#/audio_challenge/" class="button">Audio challenge</a>
         <div class="page-buttons" id="page-buttons">
           <a href="/#/textbook/${groupX}/0" class="page-changer" id="page-start"><<</a>
           <a href="/#/textbook/${groupX}/${pageMinus}" class="page-changer" id="page-minus"><</a>
-          <div class="current-page" id="current-page"><span id="current-page-span">${
-            pageX + 1
-          }/30</span></div>
+          <div class="current-page" id="current-page"><span id="current-page-span">${pageX + 1}/30</span></div>
           <a href="/#/textbook/${groupX}/${pagePlus}" class="page-changer" id="page-plus">></a>
           <a href="/#/textbook/${groupX}/29" class="page-changer" id="page-end">>></a>
         </div>
+        <a href="/#/sprint/" class="button">Sprint</a>
       </div>
     </section>
       `;
@@ -177,10 +201,7 @@ class Textbook implements Page {
       const pageX = Number(window.location.hash.split("/")[3]);
       localStorage.setItem("rslang_current_page", `${pageX}`);
       localStorage.setItem("rslang_current_group", `${groupX}`);
-      (document.getElementById("textbook") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/${pageX}`
-      );
+      (document.getElementById("textbook") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/${pageX}`);
     }
   }
 
@@ -189,24 +210,13 @@ class Textbook implements Page {
     if (hash[1] === "textbook" && hash.length === 4) {
       const groupX = Number(window.location.hash.split("/")[2]);
       const pageX = Number(window.location.hash.split("/")[3]);
-      (document.getElementById("page-start") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/0`
-      );
-      (document.getElementById("page-end") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/29`
-      );
+      (document.getElementById("page-start") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/0`);
+      (document.getElementById("page-end") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/29`);
       if (pageX > 0)
         (document.getElementById("page-minus") as HTMLLinkElement).setAttribute(
-          "href",
-          `/#/textbook/${groupX}/${pageX - 1}`
-        );
+          "href",`/#/textbook/${groupX}/${pageX - 1}`);
       if (pageX < 29)
-        (document.getElementById("page-plus") as HTMLLinkElement).setAttribute(
-          "href",
-          `/#/textbook/${groupX}/${pageX + 1}`
-        );
+        (document.getElementById("page-plus") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/${pageX + 1}`);
     }
   }
 
@@ -235,6 +245,16 @@ class Textbook implements Page {
     document
       .querySelectorAll(".word-card__audio")
       .forEach((el) => el.addEventListener("click", this.playAudio));
+    setTimeout(() => {
+      if (
+        Number(localStorage.getItem("rslang-current-page-total-difficulty")) ===
+        0
+      ) {
+        (
+          document.querySelectorAll(".game__button") as NodeListOf<HTMLElement>
+        ).forEach((el) => el.setAttribute("style", "pointer-events:none"));
+      }
+    }, 200);
     return;
   }
 }

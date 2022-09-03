@@ -9,21 +9,21 @@ class HomePage implements Page {
         <p>RS Lang — it is an effective service for the exciting practice of languages. Development of a strong theoretical base and emancipation in communication in a foreign language. Join now!</p>
       </section>
       <section class="our-team">
-        <h2>Our team:</h2>`
-      coloborations.forEach(item => {
-        view +=  `
+        <h2>Our team:</h2>`;
+    coloborations.forEach((item) => {
+      view += `
         <div class="item-team">
           <a class="coloboration-info" href="${item.github}">
             <h3>${item.name}</h3>
             <img class="img-github" src="./assets/svg/github.svg" alt="github logo">
           </a>
-          <p>Create:</p>`
-        item.create.forEach(itemCreate => {
-          view += `<li>${itemCreate}</li>`
-          })
-        view += `</ul></div>`
-        }) 
-    
+          <p>Create:</p>`;
+      item.create.forEach((itemCreate) => {
+        view += `<li>${itemCreate}</li>`;
+      });
+      view += `</ul></div>`;
+    });
+
     view += `</section>`;
     return view;
   }
@@ -34,5 +34,3 @@ class HomePage implements Page {
 }
 
 export default HomePage;
-
-

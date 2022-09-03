@@ -10,15 +10,15 @@ class Footer implements Component {
   }
 
   public async render(): Promise<string> {
-    let creatersInfo = ''
-    coloborations.forEach(item => {
+    let creatersInfo = "";
+    coloborations.forEach((item) => {
       creatersInfo += `
       <a class="coloboration-info" href="${item.github}">
         <h4>${item.name}</h4>
         <img class="img-github" src="./assets/svg/github.svg" alt="github logo">
       </a>
-      `
-    })
+      `;
+    });
     const view = `
     <div class="wrapper footer__wrapper ${this.class ? this.class : ""}">
       <a class="link rs-logo" href="https://rs.school/">
