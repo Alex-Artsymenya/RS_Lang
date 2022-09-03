@@ -79,12 +79,9 @@ class Textbook implements Page {
       }
     }
     localStorage.setItem(
-      "rslang-current-page-total-difficulty",
-      `${total_diff}`
-    );
+      "rslang-current-page-total-difficulty",`${total_diff}`);
     const logStatus = (
-      document.getElementById("authorization-button") as HTMLElement
-    ).innerHTML;
+      document.getElementById("authorization-button") as HTMLElement).innerHTML;
     result = result
       ? result
       : logStatus === "Log in"
@@ -166,30 +163,14 @@ class Textbook implements Page {
     <div class="textbook-navigation">
       <div class="wrapper textbook-navigation__wrapper">
         <div class="navigation-buttons">
-          <a href="/#/textbook/0/0" class="${
-            groupX === 0 ? "button" : "button_grey"
-          } textbook__button">A1</a>
-          <a href="/#/textbook/1/0" class="${
-            groupX === 1 ? "button" : "button_grey"
-          } textbook__button">A2</a>
-          <a href="/#/textbook/2/0" class="${
-            groupX === 2 ? "button" : "button_grey"
-          } textbook__button">B1</a>
-          <a href="/#/textbook/3/0" class="${
-            groupX === 3 ? "button" : "button_grey"
-          } textbook__button">B2</a>
-          <a href="/#/textbook/4/0" class="${
-            groupX === 4 ? "button" : "button_grey"
-          } textbook__button">C1</a>
-          <a href="/#/textbook/5/0" class="${
-            groupX === 5 ? "button" : "button_grey"
-          } textbook__button">C2</a>
-          <a href="/#/textbook/6/0" class="${
-            groupX === 6 ? "button" : "button_grey"
-          } textbook__button">User words</a>
-          <a href="/#/textbook/info/0" class="${
-            groupX === 7 ? "button" : "button_grey"
-          } textbook__button">info</a>
+          <a href="/#/textbook/0/0" class="${groupX === 0 ? "button" : "button_grey"} textbook__button">A1</a>
+          <a href="/#/textbook/1/0" class="${groupX === 1 ? "button" : "button_grey"} textbook__button">A2</a>
+          <a href="/#/textbook/2/0" class="${groupX === 2 ? "button" : "button_grey"} textbook__button">B1</a>
+          <a href="/#/textbook/3/0" class="${groupX === 3 ? "button" : "button_grey"} textbook__button">B2</a>
+          <a href="/#/textbook/4/0" class="${groupX === 4 ? "button" : "button_grey"} textbook__button">C1</a>
+          <a href="/#/textbook/5/0" class="${groupX === 5 ? "button" : "button_grey"} textbook__button">C2</a>
+          <a href="/#/textbook/6/0" class="${groupX === 6 ? "button" : "button_grey"} textbook__button">User words</a>
+          <a href="/#/textbook/info/0" class="${groupX === 7 ? "button" : "button_grey"} textbook__button">info</a>
         </div>
       </div>
     </div>
@@ -197,16 +178,12 @@ class Textbook implements Page {
       ${groupX === 7 ? info : result}
     </section>
     <section>
-      <div class="wrapper page-changer__wrapper" style="${
-        groupX === 6 || groupX === 7 ? "display:none" : ""
-      }">
+      <div class="wrapper page-changer__wrapper" style="${groupX === 6 || groupX === 7 ? "display:none" : ""}">
         <a href="/#/audio_challenge/" class="button">Audio challenge</a>
         <div class="page-buttons" id="page-buttons">
           <a href="/#/textbook/${groupX}/0" class="page-changer" id="page-start"><<</a>
           <a href="/#/textbook/${groupX}/${pageMinus}" class="page-changer" id="page-minus"><</a>
-          <div class="current-page" id="current-page"><span id="current-page-span">${
-            pageX + 1
-          }/30</span></div>
+          <div class="current-page" id="current-page"><span id="current-page-span">${pageX + 1}/30</span></div>
           <a href="/#/textbook/${groupX}/${pagePlus}" class="page-changer" id="page-plus">></a>
           <a href="/#/textbook/${groupX}/29" class="page-changer" id="page-end">>></a>
         </div>
@@ -224,10 +201,7 @@ class Textbook implements Page {
       const pageX = Number(window.location.hash.split("/")[3]);
       localStorage.setItem("rslang_current_page", `${pageX}`);
       localStorage.setItem("rslang_current_group", `${groupX}`);
-      (document.getElementById("textbook") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/${pageX}`
-      );
+      (document.getElementById("textbook") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/${pageX}`);
     }
   }
 
@@ -236,24 +210,13 @@ class Textbook implements Page {
     if (hash[1] === "textbook" && hash.length === 4) {
       const groupX = Number(window.location.hash.split("/")[2]);
       const pageX = Number(window.location.hash.split("/")[3]);
-      (document.getElementById("page-start") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/0`
-      );
-      (document.getElementById("page-end") as HTMLLinkElement).setAttribute(
-        "href",
-        `/#/textbook/${groupX}/29`
-      );
+      (document.getElementById("page-start") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/0`);
+      (document.getElementById("page-end") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/29`);
       if (pageX > 0)
         (document.getElementById("page-minus") as HTMLLinkElement).setAttribute(
-          "href",
-          `/#/textbook/${groupX}/${pageX - 1}`
-        );
+          "href",`/#/textbook/${groupX}/${pageX - 1}`);
       if (pageX < 29)
-        (document.getElementById("page-plus") as HTMLLinkElement).setAttribute(
-          "href",
-          `/#/textbook/${groupX}/${pageX + 1}`
-        );
+        (document.getElementById("page-plus") as HTMLLinkElement).setAttribute("href",`/#/textbook/${groupX}/${pageX + 1}`);
     }
   }
 
