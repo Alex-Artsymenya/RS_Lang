@@ -28,3 +28,26 @@
   @include vertical-flex();
 }
 
+.item-team {
+
+  padding: 10px;
+  border: solid white 2px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+
+  .coloboration-info {
+  
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+  
+    .img-github {
+      width: 40px;
+      height: 40px;
+      border-radius: 3px;
+      background-color: white;
+    }
+  }
+
+}

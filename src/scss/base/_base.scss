@@ -15,6 +15,14 @@ body {
   overflow-x: hidden;
 }
 
+.main-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1920px;
+  width: 100%;
+  justify-content: space-between;
+}
 main {
   flex-grow: 1;
 }

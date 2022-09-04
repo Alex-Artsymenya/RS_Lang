@@ -9,6 +9,7 @@ import AudioChallenge from "../pages/AudioChallenge";
 import Sprint from "../pages/Sprint";
 import Header from "../Header";
 import Footer from "../Footer";
+import HomePage from "../pages/Home";
 
 export interface Request {
   resource: string;
@@ -21,6 +22,7 @@ const routes: Record<string, Page> = {
   "/statistics": new Statistics(),
   "/audio_challenge": new AudioChallenge(),
   "/sprint": new Sprint(),
+  "/": new HomePage(),
 };
 const errorPage: Error404 = new Error404();
 
