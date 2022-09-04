@@ -104,10 +104,9 @@ class AudioChallenge implements Page {
       const activeBtn = document.querySelector(
         ".test-audiochalenge .button"
       ) as HTMLElement;
-      document.querySelector(".main-wrapper")?.append(elem);
+      document.querySelector(".section-audiochallenge")?.append(elem);
       window.scrollTo(0, 0);
       document.body.style.overflow = "hidden";
-      this.hearts = COUNT_LIFES;
       this.CreateStateCard(parseInt(activeBtn.dataset.index as string));
     };
   }
@@ -146,8 +145,9 @@ class AudioChallenge implements Page {
       }
     }, 1000);
   }
-
-  public async CreateStateCard(num: number) {
+  
+  public async CreateStateCard(num: number, page:number = 30) {
+    this.hearts = COUNT_LIFES;
     this.clearState();
     const downloadMenu = document.createElement("h2");
     downloadMenu.classList.add("download-info");
@@ -155,13 +155,14 @@ class AudioChallenge implements Page {
     downloadMenu.innerHTML = "DOWNLOADING";
     const interval = setInterval(() => {
       downloadMenu.innerHTML = ">" + downloadMenu.innerHTML + "<";
-      if (downloadMenu.innerHTML.length > 30)
+      if (downloadMenu.innerHTML.length > 40)
         downloadMenu.innerHTML = "DOWNLOADING";
     }, 500);
-    for (let i = 0; i < 30; i++) {
+    for (let i = page; i >= 0; i--) {
       const arrayCards = await Request.getWordsList({ group: num, page: i });
       this.stateCard.push(...arrayCards);
     }
+    console.log(this.stateCard)
     clearInterval(interval);
     downloadMenu.remove();
     this.createViewAudioChallenge();
@@ -294,7 +295,7 @@ class AudioChallenge implements Page {
 
   public renderHeart(num = 5) {
     const element = document.querySelector(
-      ".layoutForAudioChallenge"
+      ".block-for-game"
     ) as HTMLElement;
     const div = document.createElement("div");
     div.classList.add("heart_audio-chellenge");
@@ -457,7 +458,3 @@ class AudioChallenge implements Page {
 }
 
 export default AudioChallenge;
-
-// document.addEventListener('keydown', (event)=> {
-//   console.log(event.target)
-// })
