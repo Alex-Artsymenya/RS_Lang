@@ -37,7 +37,7 @@ export class Request {
         Accept: "application/json",
       },
     });
-    const content = await rawResponse.text();
+    const content = await rawResponse.json();
     return content;
   }
   //3. Отредактировать слово в списке сложных слов
