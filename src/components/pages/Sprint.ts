@@ -23,7 +23,7 @@ class Sprint implements Page {
   static combo: number[] = [];
   static totalPoint = 0;
   static point = 10;
-  static time = 5;
+  static time = 60;
   static rightAnswer: IQuestions[] = [];
   static wrongAnswer: IQuestions[] = [];
 
