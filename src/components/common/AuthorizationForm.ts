@@ -1,7 +1,7 @@
 import Component from "./Component";
 import Drawer from "../drawer/Drawer";
 import Button from "./Button";
-import Request from "../../services/Requests";
+// import Request from "../../services/Requests";
 import "../../scss/components/_authorization-form.scss";
 import { AuthUser } from "../../auth/auth";
 import { IAuthError } from "../../type";
@@ -13,6 +13,10 @@ type authorizationType = {
   token: string;
   userId: string;
 };
+export type authorizationFormType = {
+  class: string;
+  id: string;
+};
 
 class AuthorizationForm implements Component {
   private class: string;
@@ -20,11 +24,11 @@ class AuthorizationForm implements Component {
   private type: "Sign in" | "Sign up";
   private action;
 
-  public constructor(options: any) {
+  public constructor(options: authorizationFormType) {
     this.class = options.class;
     this.id = options.id;
     this.type = "Sign in";
-    this.action = this.loginUser;
+    this.action = this.loginUser ? this.loginUser : this.createUser;
   }
 
   static isAuthorized = false;
@@ -117,8 +121,8 @@ class AuthorizationForm implements Component {
 
   private async loginUser(
     email: string,
-    password: string,
-    name?: string
+    password: string
+    // name: string
   ): Promise<void> {
     try {
       const res = await AuthUser.loginUser({
