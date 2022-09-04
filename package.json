@@ -10,7 +10,7 @@
     "lint": "eslint ./src",
     "lintfix": "eslint --fix ./src",
     "serve": "webpack serve",
-    "deploy": "gh-pages -d ../RS_Lang/dist -e rslang"
+    "start": "webpack --mode production"
   },
   "keywords": [
     "english",
