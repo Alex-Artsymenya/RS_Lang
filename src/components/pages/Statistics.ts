@@ -5,6 +5,7 @@ class Statistics implements Page {
     const view = `
       <section class="section">
           <h1>Statistics</h1>
+          <h3>Temperary unavailable</h3>
       </section>
     `;
     return view;

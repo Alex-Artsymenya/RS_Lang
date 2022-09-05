@@ -36,15 +36,17 @@ class Textbook implements Page {
     const url = Utils.parseRequestURL();
     const groupX = Number(url.id) || (Number(url.id) === 0 ? 0 : 7);
     const pageX = Number(url.verb);
-    const userInfo: string | null = localStorage.getItem("userInfo");
-    let currentId = "";
-    let currentToken = "";
-    if (userInfo) {
-      AuthorizationForm.authorizationInfo = JSON.parse(userInfo);
-      currentId = AuthorizationForm.authorizationInfo.userId;
-      currentToken = AuthorizationForm.authorizationInfo.token;
-    }
-
+    // const userInfo: string | null = localStorage.getItem("userInfo");
+    // let currentId = "";
+    // let currentToken = "";
+    // if (userInfo) {
+      // AuthorizationForm.authorizationInfo = JSON.parse(userInfo);
+    // console.log(AuthorizationForm.authorizationInfo);
+    // if (AuthorizationForm.authorizationInfo) {
+    let  currentId = AuthorizationForm.authorizationInfo ? AuthorizationForm.authorizationInfo.userId : "null";
+    let  currentToken = AuthorizationForm.authorizationInfo ? AuthorizationForm.authorizationInfo.token : 'null';
+    // }
+    // }
     const pageMinus = pageX > 0 ? pageX - 1 : pageX;
     const pagePlus = pageX < 29 ? pageX + 1 : pageX;
     const res: Card[] =
@@ -54,7 +56,10 @@ class Textbook implements Page {
             token: currentToken,
             filter: '{"userWord.difficulty":"2"}',
           })
-        : await Request.getWordsList({ group: groupX, page: pageX });
+        : groupX === 6 && !AuthorizationForm.isAuthorized ?
+          [] :
+          await Request.getWordsList({ group: groupX, page: pageX });
+        // : await Request.getWordsList({ group: groupX, page: pageX });
     const arrayLength: number =
       groupX === 6 && AuthorizationForm.isAuthorized
         ? res[0].paginatedResults.length
@@ -103,8 +108,10 @@ class Textbook implements Page {
           } catch {
             wordDiff = 1;
             await Request.SetWordInUsersList(
-              currentId,
-              currentToken,
+              AuthorizationForm.authorizationInfo.userId,
+              AuthorizationForm.authorizationInfo.token,
+              // currentId,
+              // currentToken,
               res[i].id,
               Difficulty.NORMAL
             );

@@ -2,6 +2,7 @@ import Component from "./Component";
 import "../../scss/components/_button.scss";
 import Sprint, { IQuestions } from "../pages/Sprint";
 import Drawer from "../drawer/Drawer";
+import Utils from "../../services/Utils";
 
 class ResultLayout implements Component {
   //   private class: string;
@@ -13,10 +14,32 @@ class ResultLayout implements Component {
   //     this.id = options.id;
   //     this.text = options.text;
   //   }
+
+  public createAudioFile(element: IQuestions) {
+    const audio = document.createElement("audio");
+    audio.src = Utils.getFullURL("/") + element.audio;
+    audio.onload = () => {
+      audio.play();
+    };
+    return {
+      audio: audio,
+      startPlay() {
+        audio.play();
+      },
+    };
+  }
+
   public async render(): Promise<string> {
+    const audio = (question: IQuestions) => `
+      <a class="link-to-sound_result">
+        <img src="./assets/svg/volume-up.svg">
+        <audio src="${Utils.getFullURL("/") + question.audio}">
+      </a>
+      `;
+
     const wrongAnswer = (question: IQuestions) => `
         <div class="result-layout__wrong-word">
-          <p>${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
+          <p>${audio(question)} ${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
         </div>
     `;
     let wrongAnswers = "";
@@ -25,7 +48,7 @@ class ResultLayout implements Component {
     });
     const correctAnswer = (question: IQuestions) => `
       <div class="result-layout__correct-word">
-        <p>${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
+        <p class="result-layout__word-total">${audio(question)} ${question.word} <span class="result-layout__word">- ${question.answer}</span></p>
       </div>
     `;
     let correctAnswers = "";
@@ -54,6 +77,11 @@ class ResultLayout implements Component {
   public async after_render(): Promise<void> {
     const img = document.querySelector(".img-close-btn") as HTMLElement;
     const gameLayout = document.querySelector(".result-layout") as HTMLElement;
+    const linksAudio = gameLayout.querySelectorAll('.link-to-sound_result') as NodeListOf<HTMLElement>;
+    linksAudio.forEach((element) => {
+      element.onclick = function() {
+        (<HTMLElement>this).querySelector('audio')?.play()}; 
+    });
     img.onclick = () => {
       gameLayout.remove();
       Sprint.restore();

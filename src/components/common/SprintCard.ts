@@ -21,15 +21,18 @@ class SprintCard implements Component {
   private variant: string;
   private answer: string;
   private result: boolean;
+  private audio: string;
 
   public constructor(options: {
     word: string;
     variant: string;
     answer: string;
+    audio: string;
   }) {
     this.word = options.word;
     this.variant = options.variant;
     this.answer = options.answer;
+    this.audio = options.audio;
     this.result = this.variant === this.answer ? true : false;
   }
 
@@ -60,8 +63,11 @@ class SprintCard implements Component {
         ${btnTrue}
         ${btnFalse}
       </div>
+      <div class="sprint__questions_btn-hint">
+        <p>Press <span>◄</span></p>
+        <p><span>►</span> Press</p>
+      </div>
     `;
-    // console.log("render --> SprintCard");
     return view;
   }
 
@@ -114,6 +120,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -127,6 +134,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -141,6 +149,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo = [];
@@ -155,6 +164,14 @@ class SprintCard implements Component {
     const btnArr = (<HTMLElement>wrapper).querySelectorAll(
       "button"
     ) as NodeListOf<HTMLElement>;
+    document.onkeydown = async (event) => {
+      if (event.key === 'ArrowLeft') {
+        await this.checkQuestion(btnArr[0]);
+      }
+      if (event.key === 'ArrowRight') {
+        await this.checkQuestion(btnArr[1]);
+      }
+    };
     btnArr.forEach((btn) => {
       // btn.classList.add('wrong');
       btn.onclick = async () => await this.checkQuestion(btn);
