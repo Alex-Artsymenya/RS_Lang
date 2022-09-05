@@ -40,7 +40,7 @@ class Textbook implements Page {
     let currentId = "";
     let currentToken = "";
     if (userInfo) {
-      AuthorizationForm.authorizationInfo = JSON.parse(userInfo);
+      // AuthorizationForm.authorizationInfo = JSON.parse(userInfo);
       currentId = AuthorizationForm.authorizationInfo.userId;
       currentToken = AuthorizationForm.authorizationInfo.token;
     }
