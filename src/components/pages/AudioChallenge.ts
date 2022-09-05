@@ -170,10 +170,10 @@ class AudioChallenge implements Page {
     }, 500);
     for (let i = page; i >= 0; i--) {
       const arrayCards = await Request.getWordsList({ group: num, page: i });
-      console.log(arrayCards)
+      // console.log(arrayCards)
       this.stateCard.push(...arrayCards);
     }
-    console.log(this.stateCard)
+    // console.log(this.stateCard)
     clearInterval(interval);
     downloadMenu.remove();
     this.createViewAudioChallenge();
@@ -257,7 +257,7 @@ class AudioChallenge implements Page {
             this.changingBtnDisabled(".text_audio-chellenge", false);
           });
           if (this.hearts === 0) {
-            console.log(this.stateCheck);
+            // console.log(this.stateCheck);
             this.renderResult();
           } else if(this.counter + 1 >= this.stateCard.length){
               this.renderResult()
@@ -266,7 +266,7 @@ class AudioChallenge implements Page {
           }
         }, 1000);
         this.counter += 1;
-        console.log('this.state:', this.stateCard, '\ncounter:', this.counter)
+        // console.log('this.state:', this.stateCard, '\ncounter:', this.counter)
       };
     });
   }

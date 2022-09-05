@@ -126,7 +126,7 @@ export class PopUp {
           //     break;
           // }
           default: {
-            console.log("something else");
+            // console.log("something else");
           }
         }
       }

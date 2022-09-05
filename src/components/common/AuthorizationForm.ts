@@ -129,7 +129,7 @@ class AuthorizationForm implements Component {
         email: email,
         password: password,
       });
-      console.log("res-->", res);
+      // console.log("res-->", res);
       if (res?.error) {
         this.showErrorMessage("email-error", `${res.error.errors[0].message}`);
         this.showErrorMessage(
@@ -171,7 +171,7 @@ class AuthorizationForm implements Component {
         email: email,
         password: password,
       });
-      console.log("respBody", respBody);
+      // console.log("respBody", respBody);
       if (respBody?.error) {
         this.errorHandler(respBody.error.errors);
       }
@@ -195,7 +195,7 @@ class AuthorizationForm implements Component {
     // AuthorizationForm.authorizationInfo.refreshToken;
     try {
       const respBody = await AuthUser.refreshToken();
-      console.log('REFRESH TOKEN --> respBody', respBody);
+      // console.log('REFRESH TOKEN --> respBody', respBody);
     } catch {
       return;
     }
@@ -233,11 +233,11 @@ class AuthorizationForm implements Component {
         ?.value;
       const email: string = (<HTMLInputElement>document.getElementById("email"))
         .value;
-      console.log("email", email);
+      // console.log("email", email);
       const password: string = (<HTMLInputElement>(
         document.getElementById("password")
       )).value;
-      console.log("pass", password);
+      // console.log("pass", password);
       await this.action(email, password, name);
       if (AuthorizationForm.isAuthorized) {
         const button = document.getElementById(

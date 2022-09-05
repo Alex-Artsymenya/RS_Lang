@@ -13,7 +13,6 @@ export class AuthUser {
           "Content-Type": "application/json",
         },
       });
-      console.log("response", response);
       if (response.status == 417) {
         return {
           error: {
@@ -30,12 +29,10 @@ export class AuthUser {
         return response;
       }
       const body = await response.json();
-      console.log("body-create-auth-->", body);
       return body;
     } catch (error) {
-      console.log("error-create-auth-->", error);
       if (error instanceof SyntaxError) {
-        console.log(JSON.stringify(error.message));
+        // console.log(JSON.stringify(error.message));
       }
     }
   }
@@ -49,14 +46,12 @@ export class AuthUser {
         },
         body: JSON.stringify(data),
       });
-      console.log("response", response);
       if (response.status == 200) {
         const body = await response.json();
         localStorage.setItem("token", body.token);
         localStorage.setItem("name", body.name);
         localStorage.setItem("userId", body.userId);
         localStorage.setItem("userInfo", JSON.stringify(body));
-        console.log(body);
         return body;
       }
       if (response.status == 404) {
@@ -78,12 +73,11 @@ export class AuthUser {
         };
       }
       const body = await response.json();
-      console.log(body);
       return body;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error instanceof SyntaxError) {
-        console.log(JSON.stringify(error.message));
+        // console.log(JSON.stringify(error.message));
       }
     }
   }
@@ -98,7 +92,6 @@ export class AuthUser {
           "Content-Type": "application/json",
         }
       });
-      console.log("response from AUTH.TS -->", response);
       if (response.status == 200) {
         const body = await response.json();
         AuthorizationForm.isAuthorized = true;
@@ -112,7 +105,6 @@ export class AuthUser {
         AuthorizationForm.authorizationInfo.refreshToken = body.refreshToken;
         userInfo.refreshToken = body.refreshToken;
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        console.log('body from AUTH.TS -->', body);
         return body;
       }
       // if (response.status == 404) {
@@ -139,9 +131,9 @@ export class AuthUser {
       // console.log(body);
       // return body;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error instanceof SyntaxError) {
-        console.log(JSON.stringify(error.message));
+        // console.log(JSON.stringify(error.message));
       }
     }
   }
