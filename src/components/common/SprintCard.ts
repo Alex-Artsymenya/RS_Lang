@@ -60,8 +60,11 @@ class SprintCard implements Component {
         ${btnTrue}
         ${btnFalse}
       </div>
+      <div class="sprint__questions_btn-hint">
+        <p>Press <span>◄</span></p>
+        <p><span>►</span> Press</p>
+      </div>
     `;
-    // console.log("render --> SprintCard");
     return view;
   }
 
@@ -155,6 +158,14 @@ class SprintCard implements Component {
     const btnArr = (<HTMLElement>wrapper).querySelectorAll(
       "button"
     ) as NodeListOf<HTMLElement>;
+    document.onkeydown = async (event) => {
+      if (event.key === 'ArrowLeft') {
+        await this.checkQuestion(btnArr[0]);
+      }
+      if (event.key === 'ArrowRight') {
+        await this.checkQuestion(btnArr[1]);
+      }
+    };
     btnArr.forEach((btn) => {
       // btn.classList.add('wrong');
       btn.onclick = async () => await this.checkQuestion(btn);
