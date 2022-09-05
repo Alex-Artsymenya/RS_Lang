@@ -21,15 +21,18 @@ class SprintCard implements Component {
   private variant: string;
   private answer: string;
   private result: boolean;
+  private audio: string;
 
   public constructor(options: {
     word: string;
     variant: string;
     answer: string;
+    audio: string;
   }) {
     this.word = options.word;
     this.variant = options.variant;
     this.answer = options.answer;
+    this.audio = options.audio;
     this.result = this.variant === this.answer ? true : false;
   }
 
@@ -117,6 +120,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -130,6 +134,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo.push(1);
@@ -144,6 +149,7 @@ class SprintCard implements Component {
           word: this.word,
           variant: this.variant,
           answer: this.answer,
+          audio: this.audio,
         });
         await this.newQuestion();
         Sprint.combo = [];

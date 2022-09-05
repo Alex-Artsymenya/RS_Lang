@@ -12,6 +12,7 @@ export interface IQuestions {
   word: string;
   variant: string;
   answer: string;
+  audio: string;
 }
 
 class Sprint implements Page {
@@ -23,7 +24,7 @@ class Sprint implements Page {
   static combo: number[] = [];
   static totalPoint = 0;
   static point = 10;
-  static time = 60;
+  static time = 6;
   static rightAnswer: IQuestions[] = [];
   static wrongAnswer: IQuestions[] = [];
 
@@ -239,11 +240,12 @@ class Sprint implements Page {
               Math.floor(Math.random() * (lengthRand - indexRand)) + indexRand
             ].wordTranslate,
           answer: el.wordTranslate,
+          audio: el.audio,
         });
       });
     });
     Sprint.arrayOfQuestions = arrQuestions;
-    console.log(arrQuestions);
+    // console.log(arrQuestions);
   }
 
   public async getWords(level: number) {
