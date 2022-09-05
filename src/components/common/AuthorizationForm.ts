@@ -191,6 +191,16 @@ class AuthorizationForm implements Component {
     }
   }
 
+  static async refreshToken() {
+    // AuthorizationForm.authorizationInfo.refreshToken;
+    try {
+      const respBody = await AuthUser.refreshToken();
+      console.log('REFRESH TOKEN --> respBody', respBody);
+    } catch {
+      return;
+    }
+  }
+
   public async after_render(): Promise<void> {
     const formPopup = document.getElementById(this.id) as HTMLElement;
     const form = formPopup.querySelector("form") as HTMLFormElement;

@@ -1,3 +1,4 @@
+import AuthorizationForm from "../components/common/AuthorizationForm";
 import { LINK } from "../state";
 import { ICreateUser, ILoginUser } from "../type";
 
@@ -79,6 +80,64 @@ export class AuthUser {
       const body = await response.json();
       console.log(body);
       return body;
+    } catch (error) {
+      console.log(error);
+      if (error instanceof SyntaxError) {
+        console.log(JSON.stringify(error.message));
+      }
+    }
+  }
+  static async refreshToken() {
+    try {
+      let { userId, refreshToken } = AuthorizationForm.authorizationInfo;
+      const response = await fetch(`${LINK.url}/${LINK.users}/${userId}/${LINK.tokens}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${refreshToken}`,
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }
+      });
+      console.log("response from AUTH.TS -->", response);
+      if (response.status == 200) {
+        const body = await response.json();
+        AuthorizationForm.isAuthorized = true;
+        localStorage.setItem("token", body.token);
+        
+        // localStorage.setItem("name", body.name);
+        // localStorage.setItem("userId", body.userId);
+        let userInfo = JSON.parse(localStorage['userInfo']);
+        AuthorizationForm.authorizationInfo.token = body.token;
+        userInfo.token = body.token;
+        AuthorizationForm.authorizationInfo.refreshToken = body.refreshToken;
+        userInfo.refreshToken = body.refreshToken;
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        console.log('body from AUTH.TS -->', body);
+        return body;
+      }
+      // if (response.status == 404) {
+      //   return {
+      //     error: {
+      //       errors: [
+      //         { path: [""], message: "Please, check your email or password" },
+      //       ],
+      //     },
+      //   };
+      // }
+      if (response.status == 403 || response.status == 401) {
+        AuthorizationForm.isAuthorized = false;
+        AuthorizationForm.clearLocalStorage();
+        return {
+          error: {
+            errors: [
+              { path: [""], message: "Please, try to re-login" },
+            ],
+          },
+        };
+      }
+      // const body = await response.json();
+      // console.log(body);
+      // return body;
     } catch (error) {
       console.log(error);
       if (error instanceof SyntaxError) {
