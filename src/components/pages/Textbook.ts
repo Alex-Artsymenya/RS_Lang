@@ -6,6 +6,7 @@ import "../../scss/layout/_textbook.scss";
 import { Card } from "../common/WordCard";
 import AuthorizationForm from "../common/AuthorizationForm";
 import Utils from "../../services/Utils";
+import Sprint from "./Sprint";
 
 interface Card1 extends Card {
   _id: string;
@@ -245,7 +246,8 @@ class Textbook implements Page {
       <div class="wrapper page-changer__wrapper" style="${
         groupX === 6 || groupX === 7 ? "display:none" : ""
       }">
-        <a href="/#/audio_challenge/" class="button" onclick="localStorage.setItem('playAudioChellenge', 'true')">Audio challenge</a>
+      // <a href="/#/audio_challenge/" class="button" onclick="localStorage.setItem('playAudioChellenge', 'true')">Audio challenge</a>
+      ${AuthorizationForm.isAuthorized ? `<a href="/#/audio_challenge/" class="button" onclick="localStorage.setItem('playAudioChellenge', 'true')">Audio challenge</a>` : ''}
         <div class="page-buttons" id="page-buttons">
           <a href="/#/textbook/${groupX}/0" class="page-changer" id="page-start"><<</a>
           <a href="/#/textbook/${groupX}/${pageMinus}" class="page-changer" id="page-minus"><</a>
@@ -255,7 +257,7 @@ class Textbook implements Page {
           <a href="/#/textbook/${groupX}/${pagePlus}" class="page-changer" id="page-plus">></a>
           <a href="/#/textbook/${groupX}/29" class="page-changer" id="page-end">>></a>
         </div>
-        <a href="/#/sprint/" class="button">Sprint</a>
+        ${AuthorizationForm.isAuthorized ? `<button class="button" id='sprint-from-textbook'>Sprint</button>` : ''}
       </div>
     </section>
       `;
@@ -337,6 +339,13 @@ class Textbook implements Page {
         ).forEach((el) => el.setAttribute("style", "pointer-events:none"));
       }
     }, 200);
+    let sprintBtn = document.getElementById('sprint-from-textbook');
+    if (sprintBtn) {
+      sprintBtn.onclick = async () => {
+        let sprint = new Sprint();
+        await sprint.startSprint(localStorage['rslang_current_group'], localStorage['rslang_current_page']);
+      }
+    }
     return;
   }
 }

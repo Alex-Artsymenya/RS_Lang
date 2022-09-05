@@ -18,6 +18,10 @@ export interface IQuestions {
 class Sprint implements Page {
   // static indexWord: number;
   // static arrayOfQuestions: IQuestions[];
+  level?: string;
+  constructor(level?: string) {
+    this.level = level;
+  }
 
   static indexWord = 0;
   static arrayOfQuestions: IQuestions[] = [];
@@ -124,10 +128,11 @@ class Sprint implements Page {
         ) as HTMLElement;
         gameLayout.remove();
         Sprint.restore();
-        // Drawer.drawPage(new Sprint());
-        await Drawer.reDrawComponents(new ResultLayout(), "sprint-section");
-        // console.log("SPRINT--> RightAnsw -->", Sprint.rightAnswer);
-        // console.log("SPRINT--> WrongAnsw -->", Sprint.wrongAnswer);
+        if (document.getElementById('sprint-section')) {
+          await Drawer.reDrawComponents(new ResultLayout(), "sprint-section");
+        } else {
+          await Drawer.reDrawComponents(new ResultLayout(), "page_container");
+        }
       }
     }, 1000);
     localStorage.setItem("idIntervalSprint", JSON.stringify(idInterval));
@@ -157,29 +162,44 @@ class Sprint implements Page {
     // }, 1000);
   }
 
-  public async startSprint() {
-    const startBtn = document.querySelector(
-      ".sprint__btn_start"
-    ) as HTMLElement;
-    startBtn.onclick = async () => {
-      const level = this.getWordsLevel();
-      await Drawer.reDrawComponents(new GameLayout(), "sprint-section");
-      await this.questionsGenerator(level).then(() => {
-        const loader = document.querySelector(".loader-wrapper") as HTMLElement;
-        this.timer(Sprint.time);
-        loader.remove();
-      });
-      await Drawer.reDrawComponents(
-        new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]),
-        "game-layout__question_wrapper"
-      );
-      Sprint.indexWord += 1;
-    };
+  public async startSprint(level?: string, pages?: string) {
+    if (level) {
+      await Drawer.reDrawComponents(new GameLayout(), "page_container");
+        await this.questionsGenerator(level, pages).then(() => {
+          const loader = document.querySelector(".loader-wrapper") as HTMLElement;
+          this.timer(Sprint.time);
+          loader.remove();
+        });
+        await Drawer.reDrawComponents(
+          new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]),
+          "game-layout__question_wrapper"
+        );
+        Sprint.indexWord += 1;
+    } else {
+      const startBtn = document.querySelector(
+        ".sprint__btn_start"
+      ) as HTMLElement;
+      startBtn.onclick = async () => {
+        level = this.getWordsLevel();
+        await Drawer.reDrawComponents(new GameLayout(), "sprint-section");
+        await this.questionsGenerator(level).then(() => {
+          const loader = document.querySelector(".loader-wrapper") as HTMLElement;
+          this.timer(Sprint.time);
+          loader.remove();
+        });
+        await Drawer.reDrawComponents(
+          new SprintCard(Sprint.arrayOfQuestions[Sprint.indexWord]),
+          "game-layout__question_wrapper"
+        );
+        Sprint.indexWord += 1;
+      };
+    }
   }
 
-  public async questionsGenerator(level: string) {
-    const words = await this.getWords(parseInt(level));
+  public async questionsGenerator(level: string, pages?: string) {
+    let words = await this.getWords(parseInt(level), parseInt(pages ? pages : ''));
     const arrQuestions: IQuestions[] = [];
+    words = pages ? words.reverse() : words;
     words.forEach((arr) => {
       let indexRand = 0;
       let lengthRand = 0;
@@ -248,10 +268,10 @@ class Sprint implements Page {
     // console.log(arrQuestions);
   }
 
-  public async getWords(level: number) {
+  public async getWords(level: number, pages?: number) {
     // console.log("start game", level);
     const card: Card[][] = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < (pages ? pages + 1 : 30); i++) {
       card.push(await Request.getWordsList({ group: level, page: i }));
     }
     // console.log('with flat', card.flat())
