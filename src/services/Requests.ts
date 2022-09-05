@@ -60,7 +60,7 @@ export class Request {
     correctInRow: number
   ) {
     try {
-      console.log('editWordInUserWordsList -->\nid -', id, '\ntoken -', token, '\nwordid -', wordid, '\ndifficulty -', difficulty, correctInRow);
+      // console.log('editWordInUserWordsList -->\nid -', id, '\ntoken -', token, '\nwordid -', wordid, '\ndifficulty -', difficulty, correctInRow);
       // console.log('body --> ', JSON.stringify({
       //   difficulty: `${difficulty}`,
       //   optional: { correctInRow: `${correctInRow}` },
@@ -86,7 +86,7 @@ export class Request {
           break;
         }
       }
-      console.log('RAWRESONSE --> ', rawResponse);
+      // console.log('RAWRESONSE --> ', rawResponse);
       return rawResponse;
     } catch (error) {
       console.log('ERROR - UPDATE --> ', error)

@@ -27,6 +27,9 @@
 }
 
 .layoutForAudioChallenge {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   position:absolute;
   top: 0;
   bottom: 0;
@@ -45,9 +48,19 @@
     align-items: center;
     padding: 60px 20px 20px 20px;
     row-gap: 20px;
+    width: 100%;
+
+    @media (max-width: 600px) { 
+          
+      & {
+        padding: 10px 0 0 0;
+      }
+      
+    }
     
     
     .logo-sound_audio-chellenge {
+      order: 2;
       border-radius: 15px;
       height: 100px;
       width: 100px;
@@ -73,11 +86,13 @@
     }
   
     .minor-block_audio-chellenge {
+      order: 3;
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
       justify-content: space-evenly;
-      gap: 20px;
+      gap: 2%;
+      row-gap: 10px;
       align-items: center;
       width: 100%;
       max-width: 1200px;
@@ -89,13 +104,30 @@
         font-weight: 600;
         border-radius: 15px;
         padding: 5px;
-        width: 300px;
-        height: 100px;
+        width: 30%;
+        height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
         user-select: none;
         text-align: center;
+
+        @media (max-width: 830px) { 
+          
+          & {
+            width: 40%;
+            // height: auto;
+          }
+          
+        }
+        @media (max-width: 600px) { 
+          
+          & {
+            width: 80%;
+            height: auto;
+          }
+          
+        }
 
         
         &:hover {
@@ -151,15 +183,16 @@
 
 
   .heart_audio-chellenge {
-    position: absolute;
+    // position: absolute;
     top: 10px;
-    left: 0;
-    right: 0;
+    // left: 0;
+    // right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     column-gap: 5px;
     height: 40px;
+    order: 1;
 
     img {
       height: 40px;
@@ -174,8 +207,8 @@
   flex-direction: column;
   align-items:flex-start;
   background-color: black;
-  position: absolute;
-  padding: 20px;
+  // position: absolute;
+  // padding: 20px;
   top: 20px;
   bottom: 20px;
   left: calc(50% - 350px);
@@ -183,6 +216,9 @@
   border-radius: 20px;
   padding: 10px;
   max-width: 700px;
+  margin-top: 5%;
+  height: 100vh;
+  max-height: 687px;
 
   .body_bad-result,
   .body_good-result {
@@ -236,10 +272,11 @@
 }
 
 .download-info {
+  margin-top: 100px;
   color: black;
-  position: absolute;
-  top: 45%;
-  left: 40%;
+  // position: absolute;
+  // top: 45%;
+  // left: 40%;
 }
 
 .disabled {
@@ -247,6 +284,7 @@
 }
 
 .helper-window {
+  order: 4;
   background-color: #ccffff;
   border: solid black 2px;
   color: black;
