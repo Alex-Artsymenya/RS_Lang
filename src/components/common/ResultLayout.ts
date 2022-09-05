@@ -3,6 +3,7 @@ import "../../scss/components/_button.scss";
 import Sprint, { IQuestions } from "../pages/Sprint";
 import Drawer from "../drawer/Drawer";
 import Utils from "../../services/Utils";
+import Textbook from "../pages/Textbook";
 
 class ResultLayout implements Component {
   //   private class: string;
@@ -88,7 +89,11 @@ class ResultLayout implements Component {
       Sprint.rightAnswer = [];
       Sprint.wrongAnswer = [];
       // clearInterval(localStorage.getItem('idIntervalSprint') ? localStorage.idIntervalSprint: null);
-      Drawer.drawPage(new Sprint());
+      if (window.location.hash.split("/")[1] === "sprint") {
+        Drawer.drawPage(new Sprint());
+      } else {
+        Drawer.drawPage(new Textbook());
+      }
     };
     return;
   }

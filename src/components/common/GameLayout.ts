@@ -2,6 +2,7 @@ import Component from "./Component";
 import "../../scss/components/_button.scss";
 import Sprint from "../pages/Sprint";
 import Drawer from "../drawer/Drawer";
+import Textbook from "../pages/Textbook";
 
 class GameLayout implements Component {
   //   private class: string;
@@ -54,7 +55,11 @@ class GameLayout implements Component {
           ? localStorage.idIntervalSprint
           : null
       );
-      Drawer.drawPage(new Sprint());
+      if (window.location.hash.split("/")[1] === "sprint") {
+        Drawer.drawPage(new Sprint());
+      } else {
+        Drawer.drawPage(new Textbook());
+      }
     };
     return;
   }
