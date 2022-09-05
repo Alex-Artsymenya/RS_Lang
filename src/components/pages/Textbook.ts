@@ -245,7 +245,7 @@ class Textbook implements Page {
       <div class="wrapper page-changer__wrapper" style="${
         groupX === 6 || groupX === 7 ? "display:none" : ""
       }">
-        <a href="/#/audio_challenge/" class="button">Audio challenge</a>
+        <a href="/#/audio_challenge/" class="button" onclick="localStorage.setItem('playAudioChellenge', 'true')">Audio challenge</a>
         <div class="page-buttons" id="page-buttons">
           <a href="/#/textbook/${groupX}/0" class="page-changer" id="page-start"><<</a>
           <a href="/#/textbook/${groupX}/${pageMinus}" class="page-changer" id="page-minus"><</a>

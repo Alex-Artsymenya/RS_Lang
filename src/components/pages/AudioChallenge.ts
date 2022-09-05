@@ -89,26 +89,36 @@ class AudioChallenge implements Page {
     const startBtn = document.querySelector(
       ".start_audiochallenge"
     ) as HTMLElement;
-    startBtn.onclick = () => {
-      const elem = document.createElement("div");
-      elem.classList.add("layoutForAudioChallenge");
-      const img = new Image();
-      img.src = "./assets/svg/close.svg";
-      img.classList.add("img-close-btn");
-      img.onclick = () => {
-        elem.remove();
-        document.body.style.overflow = "auto";
-        clearTimeout(this.timer);
-      };
-      elem.append(img);
-      const activeBtn = document.querySelector(
-        ".test-audiochalenge .button"
-      ) as HTMLElement;
-      document.querySelector(".section-audiochallenge")?.append(elem);
-      window.scrollTo(0, 0);
-      document.body.style.overflow = "hidden";
-      this.CreateStateCard(parseInt(activeBtn.dataset.index as string));
+    startBtn.onclick = () => {this.startAudioChallengeCreate()};
+
+  
+    if(localStorage.getItem('playAudioChellenge') === 'true'){
+      const currentPage = localStorage.getItem('rslang_current_page') ?
+        parseInt(localStorage.getItem('rslang_current_page') as string) : 
+        30;
+      this.startAudioChallengeCreate(currentPage)
+    }
+  }
+
+  public startAudioChallengeCreate(currentPage: number = 30){
+    const elem = document.createElement("div");
+    elem.classList.add("layoutForAudioChallenge");
+    const img = new Image();
+    img.src = "./assets/svg/close.svg";
+    img.classList.add("img-close-btn");
+    img.onclick = () => {
+      elem.remove();
+      document.body.style.overflow = "auto";
+      clearTimeout(this.timer);
     };
+    elem.append(img);
+    const activeBtn = document.querySelector(
+      ".test-audiochalenge .button"
+    ) as HTMLElement;
+    document.querySelector(".section-audiochallenge")?.append(elem);
+    window.scrollTo(0, 0);
+    document.body.style.overflow = "hidden";
+    this.CreateStateCard(parseInt(activeBtn.dataset.index as string), currentPage);
   }
 
   veiwRigthChoose() {
@@ -146,7 +156,7 @@ class AudioChallenge implements Page {
     }, 1000);
   }
   
-  public async CreateStateCard(num: number, page:number = 30) {
+  public async CreateStateCard(num: number, page: number) {
     this.hearts = COUNT_LIFES;
     this.clearState();
     const downloadMenu = document.createElement("h2");
@@ -160,6 +170,7 @@ class AudioChallenge implements Page {
     }, 500);
     for (let i = page; i >= 0; i--) {
       const arrayCards = await Request.getWordsList({ group: num, page: i });
+      console.log(arrayCards)
       this.stateCard.push(...arrayCards);
     }
     console.log(this.stateCard)
@@ -208,7 +219,7 @@ class AudioChallenge implements Page {
       this.createAudioFile(this.stateCard[this.counter]).audio.play();
     };
     while (this.stateCheck.length < 4) {
-      const randomNumber = Utils.getRndInteger(0, 599);
+      const randomNumber = Utils.getRndInteger(0, this.stateCard.length);
       if (!this.stateCheck.includes(randomNumber)) {
         this.stateCheck.push(randomNumber);
       }
@@ -248,11 +259,14 @@ class AudioChallenge implements Page {
           if (this.hearts === 0) {
             console.log(this.stateCheck);
             this.renderResult();
-          } else {
+          } else if(this.counter + 1 >= this.stateCard.length){
+              this.renderResult()
+            } else {
             this.addLogicForGame();
           }
         }, 1000);
         this.counter += 1;
+        console.log('this.state:', this.stateCard, '\ncounter:', this.counter)
       };
     });
   }
@@ -328,6 +342,10 @@ class AudioChallenge implements Page {
   }
 
   public renderResult() {
+    if(localStorage.getItem('playAudioChellenge') === 'true'){
+      localStorage.removeItem('playAudioChellenge')
+    }
+
     this.keyDownEventlistenerRemove();
     document.querySelector(".block-for-game")?.remove();
     document.querySelector(".heart_audio-chellenge")?.remove();
