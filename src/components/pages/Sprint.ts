@@ -36,8 +36,8 @@ class Sprint implements Page {
   }
 
   public async render(): Promise<string> {
-    console.log(Sprint.arrayOfQuestions);
-    console.log(Sprint.indexWord);
+    // console.log(Sprint.arrayOfQuestions);
+    // console.log(Sprint.indexWord);
     const levelEnglish = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
     let buttons = "";
@@ -46,7 +46,7 @@ class Sprint implements Page {
       buttons += `
         <li>
           <a class="${
-            parseInt(RSLangGroup) < 7
+            parseInt(RSLangGroup) < 6
               ? index === parseInt(RSLangGroup)
                 ? "button"
                 : "button_grey"
@@ -125,8 +125,8 @@ class Sprint implements Page {
         Sprint.restore();
         // Drawer.drawPage(new Sprint());
         await Drawer.reDrawComponents(new ResultLayout(), "sprint-section");
-        console.log("SPRINT--> RightAnsw -->", Sprint.rightAnswer);
-        console.log("SPRINT--> WrongAnsw -->", Sprint.wrongAnswer);
+        // console.log("SPRINT--> RightAnsw -->", Sprint.rightAnswer);
+        // console.log("SPRINT--> WrongAnsw -->", Sprint.wrongAnswer);
       }
     }, 1000);
     localStorage.setItem("idIntervalSprint", JSON.stringify(idInterval));
