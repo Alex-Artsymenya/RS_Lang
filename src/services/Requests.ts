@@ -1,3 +1,4 @@
+import AuthorizationForm from "../components/common/AuthorizationForm";
 import Utils from "./Utils";
 
 const url = Utils.getFullURL("");
@@ -7,6 +8,16 @@ export enum Difficulty {
   NORMAL, // Не добавлено в изученное/сложное
   HARD, // добавлено в сложное
 }
+
+// interface IOptions {
+//   id: string;
+//   token: string;
+//   group?: number;
+//   page?: number;
+//   wordsPerPage?: number;
+//   filter?: string;
+// }
+
 export class Request {
   // static createUser(arg0: { name: string; email: string; password: string }) {
   //   throw new Error("Method not implemented.");
@@ -48,22 +59,42 @@ export class Request {
     difficulty: Difficulty,
     correctInRow: number
   ) {
-    const rawResponse = await fetch(`${url}/users/${id}/words/${wordid}`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        difficulty: `${difficulty}`,
-        optional: {
-          correctInRow: `${correctInRow}`,
+    try {
+      console.log('editWordInUserWordsList -->\nid -', id, '\ntoken -', token, '\nwordid -', wordid, '\ndifficulty -', difficulty, correctInRow);
+      // console.log('body --> ', JSON.stringify({
+      //   difficulty: `${difficulty}`,
+      //   optional: { correctInRow: `${correctInRow}` },
+      // }));
+      const rawResponse = await fetch(`${url}/users/${id}/words/${wordid}`, {
+        method: "PUT",
+        // withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-      }),
-    });
-    const content = await rawResponse.json();
-    return content;
+        body: JSON.stringify({
+          difficulty: `${difficulty}`,
+          optional: {
+            correctInRow: `${correctInRow}`,
+          },
+        }),
+      });
+      switch (true) {
+        case rawResponse.status === 404: {
+          Request.SetWordInUsersList(id, token, wordid, difficulty);
+          break;
+        }
+      }
+      console.log('RAWRESONSE --> ', rawResponse);
+      return rawResponse;
+    } catch (error) {
+      console.log('ERROR - UPDATE --> ', error)
+      return
+    }
+    
+    // const content = await rawResponse.json();
+    // return rawResponse;
   }
   //4. Получить слово из словаря сложных слов по айди
   static async getWordFromUserWordsList(
@@ -82,6 +113,7 @@ export class Request {
     return content;
   }
   //5.
+
   static async getAggregatedWordsList(options: {
     id: string;
     token: string;
@@ -90,6 +122,7 @@ export class Request {
     wordsPerPage?: number;
     filter?: string;
   }) {
+    // static async getAggregatedWordsList(options: IOptions) {
     const filterGroup = options.group ? `&group=${options.group}` : "";
     const filterPage = options.page ? `&page=${options.page}` : "";
     const filterWordsPerPage = options.wordsPerPage
@@ -109,6 +142,11 @@ export class Request {
         },
       }
     );
+    // console.log(rawResponse);
+    if (rawResponse.status === 401) {
+      AuthorizationForm.refreshToken();
+      Request.getAggregatedWordsList({id: options.id, token: AuthorizationForm.authorizationInfo.token, group: options?.group, page: options?.page, wordsPerPage: options?.wordsPerPage, filter: options?.filter});
+    }
     const content = await rawResponse.json();
     return content;
   }
