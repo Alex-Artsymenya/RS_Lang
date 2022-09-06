@@ -1,0 +1,53 @@
+@import '../abstract/constants';
+.promo {
+  height: calc(100vh - 162px);
+  width: calc(100vw + 20px);
+  overflow: hidden;
+  padding: 0;
+  box-shadow: 0 0 8px 8px $color-dark inset;
+  background-size: cover;
+}
+
+.promo__title {
+  width: 200px;
+  font-size: 42px;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: $color-light;
+  color: $color-light;
+  span {
+    @include styled-text();
+  }
+}
+
+.promo__wrapper {
+  margin: auto;
+  height: 100%;
+  width: 300px;
+  background-color: $color-dark;
+  @include vertical-flex();
+}
+
+.item-team {
+
+  padding: 10px;
+  border: solid white 2px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+
+  .coloboration-info {
+  
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 10px;
+  
+    .img-github {
+      width: 40px;
+      height: 40px;
+      border-radius: 3px;
+      background-color: white;
+    }
+  }
+
+}

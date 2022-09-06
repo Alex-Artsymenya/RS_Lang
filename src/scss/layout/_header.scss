@@ -1,0 +1,36 @@
+@import '../abstract/constants';
+.header {
+  width: 100%;
+  background-color: $color-dark;
+}
+
+.header__wrapper {
+  margin: auto;
+  padding: $padding;
+  @include horizontal-flex();
+}
+
+.navigation {
+  @include horizontal-flex();
+  justify-content: space-around;
+}
+
+.header__navigation {
+  width: 560px;
+}
+
+.logo {
+  @include horizontal-flex();
+  &:hover {
+    filter: invert(15%);
+  }
+}
+
+.logo__title {
+  padding-left: 10px;
+}
+
+
+.navigation__link.active {
+  color: $color-primary;
+}

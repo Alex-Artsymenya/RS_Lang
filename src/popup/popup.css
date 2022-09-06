@@ -1,0 +1,300 @@
+/* * {
+  padding: 0;
+  margin: 0;
+} */
+
+.popup_background {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(41, 41, 41, 0.6);
+    opacity: 0;
+    -webkit-transition: 0.5s all;
+    transition: 0.5s all;
+  }
+  
+  .popup_background.active {
+    opacity: 1;
+    display: block;
+    -webkit-transition: 0.5s all;
+    transition: 0.5s all;
+  }
+  
+  .popup_background.active:hover .close-popup {
+    border: 2px solid #fddcc4;
+    background: #f1cdb3;
+  }
+  
+  .popup {
+    position: absolute;
+    top: 49%;
+    left: 52%;
+  }
+  
+  .popup.active {
+    -webkit-transform: translate(-50%, -50%) scale(1);
+            transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .popup.active:hover .close-popup {
+    border: 2px solid #fddcc4;
+    background: none;
+  }
+  
+  .popup.active:hover .close-popup:hover {
+    cursor: pointer;
+    background-color: #fddcc4;
+    border: 2px solid #fddcc4;
+    background: #f1cdb3;
+  }
+  
+  .popup_inner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 34rem;
+  }
+  
+  @-webkit-keyframes fadeIn {
+    from {
+      -webkit-transform: translate(-50%, -50%) scale(0);
+              transform: translate(-50%, -50%) scale(0);
+    }
+    to {
+      -webkit-transform: translate(-50%, -50%) scale(1);
+              transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  @keyframes fadeIn {
+    from {
+      -webkit-transform: translate(-50%, -50%) scale(0);
+              transform: translate(-50%, -50%) scale(0);
+    }
+    to {
+      -webkit-transform: translate(-50%, -50%) scale(1);
+              transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  .fade-in {
+    -webkit-animation-name: fadeIn;
+            animation-name: fadeIn;
+    -webkit-animation-duration: 1.5s;
+            animation-duration: 1.5s;
+  }
+  
+  @-webkit-keyframes fadeOut {
+    from {
+      -webkit-transform: translate(-50%, -50%) scale(1);
+              transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      -webkit-transform: translate(-50%, -50%) scale(0);
+              transform: translate(-50%, -50%) scale(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      -webkit-transform: translate(-50%, -50%) scale(1);
+              transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      -webkit-transform: translate(-50%, -50%) scale(0);
+              transform: translate(-50%, -50%) scale(0);
+    }
+  }
+  
+  .fade-out {
+    -webkit-animation-name: fadeOut;
+            animation-name: fadeOut;
+    -webkit-animation-duration: 0.5s;
+            animation-duration: 0.5s;
+  }
+  
+  .close-popup {
+    -ms-flex-item-align: end;
+        align-self: flex-end;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    border: 2px solid #f1cdb3;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    border-radius: 100px;
+  }
+  
+  .close-popup:hover {
+    cursor: pointer;
+    background-color: #fddcc4;
+    border: 2px solid #fddcc4;
+    background: #f1cdb3;
+  }
+  
+  .close-popup > span,
+  .close-popup > span::after {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: #292929;
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+  }
+  
+  .close-popup > span::after {
+    content: "";
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+  }
+  
+  .popup-error {
+    padding: 1rem;
+    color: crimson;
+    text-align: center;
+  }
+  .popup-material {
+    width: 30rem;
+    height: 100%;
+    padding: 1rem;
+    background: #fafafa;
+    border-radius: 9px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #000;
+  }
+
+  .popup-material label {
+    font-size: 1.5rem;
+  }
+  
+  .popup-description {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    /* flex-wrap: wrap; */
+    padding: 1rem 2rem;
+    align-items: center;
+  }
+  
+  .popup-description p {
+    padding-right: 20px;
+    font-family: "Georgia";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 110%;
+    letter-spacing: 0.06em;
+    color: #000;
+  }
+
+  .popup-description > input {
+    width: 25rem;
+    border-radius: 1rem;
+    height: 2rem;
+    text-align: center;
+  }
+
+/* .popup-material > input {
+    font-size: 1.5rem;
+    font-weight: 600;
+    height: 3rem;
+    background-color: bisque;
+    width: 10rem;
+    border-radius: 1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0.2rem 0.2rem 0.2rem rgba(254, 238, 12, 0.7);
+}
+
+.popup-material > input:hover {
+    border-radius: 1rem;
+    background-color: rgba(254, 238, 12, 0.7);
+    border: 0.1rem solid gray;
+}
+
+.popup-material > input:active {
+    box-shadow: 0rem 0rem 0rem rgba(254, 238, 12, 0.7);
+    background-color: rgba(254, 238, 12, 1);
+    border: 0.1rem solid gray;
+} */
+
+.check-login {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 34px;
+}
+
+input[type="checkbox"] {
+  display:none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 9rem;
+  left: 1rem;
+  right: 0;
+  bottom: 0;
+  width: 4.1rem;
+  height: 1.5rem;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.3rem;
+  width: 1.3rem;
+  left: 0.1rem;
+  bottom: 0.09rem;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
